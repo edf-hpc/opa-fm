@@ -1,0 +1,335 @@
+Set Debian doesn't use /etc/sysconfig/
+Author: Ana Guerrero Lopez <ana@ekaia.org>
+Date: 2016-06-17
+
+Index: opa-fm/Esm/ib/src/linux/startup/opafm_src.xml
+===================================================================
+--- opa-fm.orig/Esm/ib/src/linux/startup/opafm_src.xml
++++ opa-fm/Esm/ib/src/linux/startup/opafm_src.xml
+@@ -2054,7 +2054,7 @@
+ 
+     <PreDefinedTopology>
+         <Enable>0</Enable>
+-        <TopologyFilename>/etc/sysconfig/opa/topology.0:0.xml</TopologyFilename>
++        <TopologyFilename>/etc/opa/topology.0:0.xml</TopologyFilename>
+     </PreDefinedTopology>
+   </Sm>
+ 
+@@ -2180,7 +2180,7 @@
+ 
+     <PreDefinedTopology>
+       <Enable>0</Enable>
+-      <TopologyFilename>/etc/sysconfig/opa/topology.1:2.xml</TopologyFilename>
++      <TopologyFilename>/etc/opa/topology.1:2.xml</TopologyFilename>
+     </PreDefinedTopology>
+   </Sm>
+ 
+@@ -2333,7 +2333,7 @@
+ 
+     <PreDefinedTopology>
+       <Enable>0</Enable>
+-      <TopologyFilename>/etc/sysconfig/opa/topology.2:1.xml</TopologyFilename>
++      <TopologyFilename>/etc/opa/topology.2:1.xml</TopologyFilename>
+     </PreDefinedTopology>
+   </Sm>
+ 
+@@ -2486,7 +2486,7 @@
+ 
+     <PreDefinedTopology>
+       <Enable>0</Enable>
+-      <TopologyFilename>/etc/sysconfig/opa/topology.2:2.xml</TopologyFilename>
++      <TopologyFilename>/etc/opa/topology.2:2.xml</TopologyFilename>
+     </PreDefinedTopology>
+   </Sm>
+ 
+Index: opa-fm/Esm/ib/man/opafmcmd.manPage
+===================================================================
+--- opa-fm.orig/Esm/ib/man/opafmcmd.manPage
++++ opa-fm/Esm/ib/man/opafmcmd.manPage
+@@ -99,7 +99,7 @@ Sets the SM log mode flags. 0/1 1=downgr
+ 
+ .sp
+ smLogMask 
+-Sets the SM log mask for a specific subsystem to the value given. For a list of subsystems and mask bit meanings, see the files /etc/sysconfig/opafm.xml or /usr/lib/opa-fm/etc/opafm.xml.
++Sets the SM log mask for a specific subsystem to the value given. For a list of subsystems and mask bit meanings, see the files /etc/opa/opafm.xml or /usr/lib/opa-fm/etc/opafm.xml.
+ 
+ .RE
+ 
+@@ -182,7 +182,7 @@ Sets the FE log mode flags. 0/1 1=downgr
+ 
+ .sp
+ feLogMask 
+-Sets the FE log mask for a specific subsystem to the value given. For a list of subsystems and mask bit meanings, see the files /etc/sysconfig/opafm.xml or /usr/lib/opa-fm/etc/opafm.xml 
++Sets the FE log mask for a specific subsystem to the value given. For a list of subsystems and mask bit meanings, see the files /etc/opa/opafm.xml or /usr/lib/opa-fm/etc/opafm.xml 
+ 
+ .RE
+ 
+Index: opa-fm/Esm/ib/man/opafmcmdall.manPage
+===================================================================
+--- opa-fm.orig/Esm/ib/man/opafmcmdall.manPage
++++ opa-fm/Esm/ib/man/opafmcmdall.manPage
+@@ -101,7 +101,7 @@ Sets the SM log mode flags. 0/1 1=downgr
+ 
+ .sp
+ smLogMask 
+-Sets the SM log mask for a specific subsystem to the value given. For a list of subsystems and mask bit meanings, see the files /etc/sysconfig/opafm.xml or /usr/lib/opa-fm/etc/opafm.xml.
++Sets the SM log mask for a specific subsystem to the value given. For a list of subsystems and mask bit meanings, see the files /etc/opa/opafm.xml or /usr/lib/opa-fm/etc/opafm.xml.
+ 
+ .RE
+ 
+@@ -184,7 +184,7 @@ Sets the FE log mode flags. 0/1 1=downgr
+ 
+ .sp
+ feLogMask 
+-Sets the FE log mask for a specific subsystem to the value given. For a list of subsystems and mask bit meanings, see the files /etc/sysconfig/opafm.xml or /usr/lib/opa-fm/etc/opafm.xml 
++Sets the FE log mask for a specific subsystem to the value given. For a list of subsystems and mask bit meanings, see the files /etc/opa/opafm.xml or /usr/lib/opa-fm/etc/opafm.xml 
+ 
+ .RE
+ 
+Index: opa-fm/Esm/ib/src/config/fm_xml.c
+===================================================================
+--- opa-fm.orig/Esm/ib/src/config/fm_xml.c
++++ opa-fm/Esm/ib/src/config/fm_xml.c
+@@ -103,7 +103,7 @@ uint32_t scpInProcess = 0;
+ #ifndef __VXWORKS__
+ int af_licensed = 0;
+ extern int kmAdvancedFeatureVerification(char* keyString);
+-#define IFS_FM_CFG_NAME		"/etc/sysconfig/opafm.xml"
++#define IFS_FM_CFG_NAME		"/etc/opa/opafm.xml"
+ #define FM_SSL_SECURITY_DIR "/usr/local/ssl/opafm"
+ #else
+ #define FM_SSL_SECURITY_DIR DIR_BASE_NAME
+@@ -9090,18 +9090,18 @@ int checkAdvancedFeaturesLicense(void)
+ #endif
+ 
+ 	// if there is no licensing file for HSM then create one
+-	if (access("/etc/sysconfig/opa/license_keys", F_OK) != 0) {
+-		fprintf(stdout, "The file /etc/sysconfig/opa/license_keys does not exist - creating a default one\n");
++	if (access("/etc/opa/license_keys", F_OK) != 0) {
++		fprintf(stdout, "The file /etc/opa/license_keys does not exist - creating a default one\n");
+ 		FILE  *aFile;
+-		aFile = fopen("/etc/sysconfig/opa/license_keys", "w");
++		aFile = fopen("/etc/opa/license_keys", "w");
+ 		if (aFile == NULL) 
+-			fprintf(stdout, "Cannot create /etc/sysconfig/opa/license_keys\n");
++			fprintf(stdout, "Cannot create /etc/opa/license_keys\n");
+ 		else
+ 			fclose(aFile);
+ 	}
+-	aFile = fopen("/etc/sysconfig/opa/license_keys", "r");
++	aFile = fopen("/etc/opa/license_keys", "r");
+ 	if (aFile == NULL) {
+-		fprintf(stdout, "Cannot open /etc/sysconfig/opa/license_keys\n");
++		fprintf(stdout, "Cannot open /etc/opa/license_keys\n");
+ 		return 0;
+ 	}
+ 	memset(license, 0, sizeof(license));
+Index: opa-fm/Esm/ib/src/linux/startup/fm_cmdall.sh
+===================================================================
+--- opa-fm.orig/Esm/ib/src/linux/startup/fm_cmdall.sh
++++ opa-fm/Esm/ib/src/linux/startup/fm_cmdall.sh
+@@ -30,15 +30,15 @@
+ 
+ # [ICS VERSION STRING: unknown]
+ 
+-CONFIG_DIR=/etc/sysconfig
++CONFIG_DIR=/etc/opa
+ CONFIG_FILE=$CONFIG_DIR/opafm.xml
+ IFS_FM_BASE=/usr/lib/opa-fm # default
+-if [ -s $CONFIG_DIR/opa/opafm.info ]
++if [ -s $CONFIG_DIR/opafm.info ]
+ then
+ 	# get IFS_FM_BASE
+-	. $CONFIG_DIR/opa/opafm.info
++	. $CONFIG_DIR/opafm.info
+ else
+-	echo "Error: $CONFIG_DIR/opa/opafm.info not found: using $IFS_FM_BASE" >&2
++	echo "Error: $CONFIG_DIR/opafm.info not found: using $IFS_FM_BASE" >&2
+ fi
+ 
+ 
+Index: opa-fm/Esm/ib/src/ibaccess/cs_info_file.c
+===================================================================
+--- opa-fm.orig/Esm/ib/src/ibaccess/cs_info_file.c
++++ opa-fm/Esm/ib/src/ibaccess/cs_info_file.c
+@@ -33,7 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ #ifndef __VXWORKS__
+ #include "cs_info_file.h"
+ 
+-#define INFO_FILE "/etc/sysconfig/opa/opafm.info"
++#define INFO_FILE "/etc/opa/opafm.info"
+ static uint8_t		buffer [256];			// cleaned up read_buffer
+ uint8_t		hfm_install_dir [256] = "/usr/lib/opa-fm";	// base directory where everything is
+ 
+Index: opa-fm/Esm/ib/src/linux/startup/fm_config/config_diff.sh
+===================================================================
+--- opa-fm.orig/Esm/ib/src/linux/startup/fm_config/config_diff.sh
++++ opa-fm/Esm/ib/src/linux/startup/fm_config/config_diff.sh
+@@ -69,9 +69,9 @@ Usage_full()
+ 	echo "to two FM instances described by file1 and file2" >&2
+ 	echo " " >&2
+ 	echo "Examples:" >&2
+-	echo "  $(basename $PROG_NAME) /etc/sysconfig/opafm.xml /usr/lib/opa-fm/etc/opafm.xml" >&2
+-	echo "  $(basename $PROG_NAME) -f /etc/sysconfig/opafm.xml /usr/lib/opa-fm/etc/opafm.xml" >&2
+-	echo "  $(basename $PROG_NAME) -d -uw /etc/sysconfig/opafm.xml /usr/lib/opa-fm/etc/opafm.xml" >&2
++	echo "  $(basename $PROG_NAME) /etc/opa/opafm.xml /usr/lib/opa-fm/etc/opafm.xml" >&2
++	echo "  $(basename $PROG_NAME) -f /etc/opa/opafm.xml /usr/lib/opa-fm/etc/opafm.xml" >&2
++	echo "  $(basename $PROG_NAME) -d -uw /etc/opa/opafm.xml /usr/lib/opa-fm/etc/opafm.xml" >&2
+ 	exit 0
+ 
+ }
+@@ -83,12 +83,12 @@ then
+     Usage_full
+ fi
+ 
+-if [ ! -f /etc/sysconfig/opa/opafm.info ]
++if [ ! -f /etc/opa/opafm.info ]
+ then
+ 	echo "config_diff: IFS FM not installed" >&2
+ 	exit 1
+ else
+-	. /etc/sysconfig/opa/opafm.info # get IFS_FM_BASE
++	. /etc/opa/opafm.info # get IFS_FM_BASE
+ 	tooldir=$IFS_FM_BASE/etc
+ fi
+ 
+Index: opa-fm/Esm/ib/src/linux/startup/fm_config/config_check.c
+===================================================================
+--- opa-fm.orig/Esm/ib/src/linux/startup/fm_config/config_check.c
++++ opa-fm/Esm/ib/src/linux/startup/fm_config/config_check.c
+@@ -62,7 +62,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ #endif
+ 
+ #define MAX_INSTANCES 8
+-#define FM_CONFIG_FILENAME "/etc/sysconfig/opafm.xml"
++#define FM_CONFIG_FILENAME "/etc/opa/opafm.xml"
+ 
+ uint8_t		debug;					// debugging mode - default is FALSE
+ uint8_t		checksum;				// checksum mode - default is FALSE
+Index: opa-fm/Esm/ib/src/linux/startup/opafmd.c
+===================================================================
+--- opa-fm.orig/Esm/ib/src/linux/startup/opafmd.c
++++ opa-fm/Esm/ib/src/linux/startup/opafmd.c
+@@ -16,7 +16,7 @@
+ #define FM_NUM_COMPONENTS 2
+ #define FM_MAX_INSTANCES 4
+ 
+-#define FM_XML_CONFIG "/etc/sysconfig/opafm.xml"
++#define FM_XML_CONFIG "/etc/opa/opafm.xml"
+ #define OPAXMLEXTRACT "/usr/lib/opa-fm/etc/opaxmlextract"
+ #define OPAXMLEXTRACT_RESTART_PARAMS "-H -e Common.Shared.StartupRetries -e Common.Shared.StartupStableWait -e Common.Sm.StartupRetries -e Common.Sm.StartupStableWait -e Common.Fe.StartupRetries -e Common.Fe.StartupStableWait -e Fm.Shared.StartupRetries -e Fm.Shared.StartupStableWait -e Fm.Sm.StartupRetries -e Fm.Sm.StartupStableWait -e Fm.Fe.StartupRetries -e Fm.Fe.StartupStableWait -X"
+ #define OPAXMLEXTRACT_INSTANCE_PARAMS "-H -e Fm.Shared.Start -e Fm.Sm.Start -e Fm.Fe.Start -X"
+Index: opa-fm/Esm/ib/src/linux/startup/fm_config/config_generate.sh
+===================================================================
+--- opa-fm.orig/Esm/ib/src/linux/startup/fm_config/config_generate.sh
++++ opa-fm/Esm/ib/src/linux/startup/fm_config/config_generate.sh
+@@ -41,13 +41,13 @@ Usage()
+ 	exit 2
+ }
+ 
+-if [ ! -f /etc/sysconfig/opa/opafm.info ]
++if [ ! -f /etc/opa/opafm.info ]
+ then
+ 	echo "config_generate: IFS FM not installed" >&2
+ 	exit 1
+ else
+ 
+-	. /etc/sysconfig/opa/opafm.info # get IFS_FM_BASE
++	. /etc/opa/opafm.info # get IFS_FM_BASE
+ 	tooldir=$IFS_FM_BASE/etc
+ fi
+ 
+@@ -648,10 +648,10 @@ then
+ 	echo "To activate this configuration, $dest_file must be transfered to"
+ 	echo "the chassis and the FM must be restarted."
+ 	echo "The fastfabric TUI provides an easy way to do this."
+-elif [ "$dest_file" != "/etc/sysconfig/opafm.xml" ]
++elif [ "$dest_file" != "/etc/opa/opafm.xml" ]
+ then
+ 	echo "To activate this configuration, $dest_file must be copied to"
+-	echo "/etc/sysconfig/opafm.xml and the FM must be restarted."
++	echo "/etc/opa/opafm.xml and the FM must be restarted."
+ else
+ 	echo "To activate this configuration, the FM must be restarted."
+ fi
+Index: opa-fm/Esm/ib/src/linux/startup/sm_capture.sh
+===================================================================
+--- opa-fm.orig/Esm/ib/src/linux/startup/sm_capture.sh
++++ opa-fm/Esm/ib/src/linux/startup/sm_capture.sh
+@@ -30,18 +30,18 @@
+ 
+ # [ICS VERSION STRING: unknown]
+ 
+-CONFIG_DIR=/etc/sysconfig
++CONFIG_DIR=/etc/opa
+ CONFIG_FILE=$CONFIG_DIR/opafm.xml
+ OPA_FM_BASE=/usr/lib/opa-fm # default
+ GDB=/usr/bin/gdb
+ SM_EXEC=/usr/lib/opa-fm/runtime/sm 
+ 
+-if [ -s $CONFIG_DIR/opa/opafm.info ]
++if [ -s $CONFIG_DIR/opafm.info ]
+ then
+ 	# get OPA_FM_BASE
+-	. $CONFIG_DIR/opa/opafm.info
++	. $CONFIG_DIR/opafm.info
+ else
+-	echo "Error: $CONFIG_DIR/opa/opafm.info not found: using $OPA_FM_BASE" >&2
++	echo "Error: $CONFIG_DIR/opafm.info not found: using $OPA_FM_BASE" >&2
+ fi
+ 
+ 
+Index: opa-fm/Esm/ib/src/linux/startup/opafmctrl.sh
+===================================================================
+--- opa-fm.orig/Esm/ib/src/linux/startup/opafmctrl.sh
++++ opa-fm/Esm/ib/src/linux/startup/opafmctrl.sh
+@@ -32,7 +32,7 @@
+ 
+ PATH=/bin:/sbin:/usr/bin:/usr/sbin
+ 
+-CONFIG_DIR=/etc/sysconfig
++CONFIG_DIR=/etc/opa
+ CONFIG_FILE=$CONFIG_DIR/opafm.xml	# opafm.info can override
+ MAX_INSTANCE=7	# largest instance number, for when config file bad
+ 
+@@ -199,15 +199,15 @@ get_config()
+ 
+ 	init_config
+ 	
+-	if [ -s $CONFIG_DIR/opa/opafm.info ]
++	if [ -s $CONFIG_DIR/opafm.info ]
+ 	then
+ 		# get IFS_FM_BASE
+-		. $CONFIG_DIR/opa/opafm.info
++		. $CONFIG_DIR/opafm.info
+ 	else
+ 		IFS_FM_BASE=/usr/lib/opa-fm
+ 		if [ "$quiet" != y ]
+ 		then
+-			echo "Error: $CONFIG_DIR/opa/opafm.info not found" >&2
++			echo "Error: $CONFIG_DIR/opafm.info not found" >&2
+ 		fi
+ 		invalid_config
+ 		return
+Index: opa-fm/Esm/ib/src/linux/fm_cmd/fm_cmd.c
+===================================================================
+--- opa-fm.orig/Esm/ib/src/linux/fm_cmd/fm_cmd.c
++++ opa-fm/Esm/ib/src/linux/fm_cmd/fm_cmd.c
+@@ -105,7 +105,7 @@ static command_t commandList[] = {
+ 	{"smStateDump",sm_state_dump, FM_MGR_SM, "Dump Internal SM state into directory specified"},
+ 	{"smLogLevel", mgr_log_level, FM_MGR_SM, "Set the SM logging level (0=NONE+, 1=WARN+, 2=NOTICE+,\n                           3=INFO+, 4=VERBOSE+, 5=DEBUG2+, 6=DEBUG4+, 7=TRACE+)"},
+ 	{"smLogMode", mgr_log_mode, FM_MGR_SM, "Set the SM log mode flags (0/1 1=downgrade\n                           non-actionable, 0/2 2=logfile only)"},
+-	{"smLogMask", mgr_log_mask, FM_MGR_SM, "Set the SM log mask for a specific subsystem to the\n                           value given see /etc/sysconfig/opafm.xml\n                           or /usr/lib/opa-fm/etc/opafm.xml\n                           for a list of subsystems and mask bit meanings"},
++	{"smLogMask", mgr_log_mask, FM_MGR_SM, "Set the SM log mask for a specific subsystem to the\n                           value given see /etc/opa/opafm.xml\n                           or /usr/lib/opa-fm/etc/opafm.xml\n                           for a list of subsystems and mask bit meanings"},
+ 	{"smPerfDebug", sm_perf_debug_toggle, FM_MGR_SM, "Toggle performance debug output for SM"},
+ 	{"saPerfDebug", sa_perf_debug_toggle, FM_MGR_SM, "Toggle performance debug output for SA"},
+ 	{"saRmppDebug", mgr_rmpp_debug_toggle, FM_MGR_SM, "Toggle Rmpp debug output for SA"},
+@@ -116,7 +116,7 @@ static command_t commandList[] = {
+ 	{"pmRmppDebug", mgr_rmpp_debug_toggle, FM_MGR_PM, "Toggle Rmpp debug output for PM"},
+ 	{"feLogLevel", mgr_log_level, FM_MGR_FE, "Set the FE logging level (0=NONE+, 1=WARN+, 2=NOTICE+,\n                           3=INFO+, 4=VERBOSE+, 5=DEBUG2+, 6=DEBUG4+, 7=TRACE+)"},
+ 	{"feLogMode", mgr_log_mode, FM_MGR_FE, "Set the FE log mode flags (0/1 1=downgrade\n                           non-actionable, 0/2 2=logfile only)"},
+-	{"feLogMask", mgr_log_mask, FM_MGR_FE, "Set the FE log mask for a specific subsystem to the\n                           value given see /etc/sysconfig/opafm.xml\n                           or /usr/lib/opa-fm/etc/opafm.xml\n                           for a list of subsystems and mask bit meanings"},
++	{"feLogMask", mgr_log_mask, FM_MGR_FE, "Set the FE log mask for a specific subsystem to the\n                           value given see /etc/opa/opafm.xml\n                           or /usr/lib/opa-fm/etc/opafm.xml\n                           for a list of subsystems and mask bit meanings"},
+ 	{"feDebug", mgr_debug_toggle, FM_MGR_FE, "Toggle debug output for FE"},
+ 	{"feRmppDebug", mgr_rmpp_debug_toggle, FM_MGR_FE, "Toggle Rmpp debug output for FE"},
+ 	{"smLooptestStart", sm_looptest_start, FM_MGR_SM, "START loop test in normal mode - specify the number of\n                           256 byte packets (default=0)"},

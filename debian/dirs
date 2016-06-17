@@ -1,0 +1,5 @@
+etc/opa
+usr/lib/opa-fm/bin
+usr/lib/opa-fm/etc
+usr/lib/opa-fm/runtime
+usr/sbin

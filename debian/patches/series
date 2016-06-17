@@ -1,0 +1,4 @@
+#compiler_flags
+change_hardcoded_paths
+target_os
+fix_path_etc

@@ -1,0 +1,50 @@
+stage.rpm/fe  		usr/lib/opa-fm/runtime/
+stage.rpm/sm            usr/lib/opa-fm/runtime/
+
+stage.rpm/opafm.service     lib/systemd/system
+stage.rpm/opafe@.service     lib/systemd/system
+stage.rpm/opasm@.service     lib/systemd/system
+
+stage.rpm/fm_capture    usr/lib/opa-fm/bin/
+stage.rpm/fm_cmd        usr/lib/opa-fm/bin/
+stage.rpm/fm_cmdall     usr/lib/opa-fm/bin/
+stage.rpm/opafmd        usr/lib/opa-fm/bin/
+stage.rpm/opafmctrl     usr/lib/opa-fm/bin/
+
+stage.rpm/opafm.xml     etc/opa/
+stage.rpm/opafm.info    etc/opa/
+
+# The /etc/ path is hardcoded in the code, not worth it fixing it yet
+stage.rpm/config_check      usr/lib/opa-fm/etc/
+stage.rpm/config_convert    usr/lib/opa-fm/etc/
+stage.rpm/config_diff       usr/lib/opa-fm/etc/
+stage.rpm/config_generate   usr/lib/opa-fm/etc/
+stage.rpm/opaxmlextract     usr/lib/opa-fm/etc/
+stage.rpm/opaxmlfilter      usr/lib/opa-fm/etc/
+
+
+# Most of this is unlikely to be useful
+stage.rpm/jmtest            usr/lib/opa-fm/bin/
+stage.rpm/lock_test            usr/lib/opa-fm/bin/
+stage.rpm/mai_filter_test   usr/lib/opa-fm/bin/
+stage.rpm/mai_handle_test   usr/lib/opa-fm/bin/
+stage.rpm/mai_open_test     usr/lib/opa-fm/bin/
+stage.rpm/mai_perf_test     usr/lib/opa-fm/bin/
+stage.rpm/mai_qp0_test      usr/lib/opa-fm/bin/
+stage.rpm/opaextracterror   usr/lib/opa-fm/bin/
+stage.rpm/opaextractlink    usr/lib/opa-fm/bin/
+stage.rpm/opaextractperf    usr/lib/opa-fm/bin/
+stage.rpm/opaextractstat    usr/lib/opa-fm/bin/
+stage.rpm/opaextractstat2   usr/lib/opa-fm/bin/
+stage.rpm/opaxmlindent      usr/lib/opa-fm/bin/
+stage.rpm/pool_test         usr/lib/opa-fm/bin/
+stage.rpm/recv              usr/lib/opa-fm/bin/
+stage.rpm/sema_test         usr/lib/opa-fm/bin/
+stage.rpm/send              usr/lib/opa-fm/bin/
+stage.rpm/smpoolsize    usr/lib/opa-fm/bin/
+stage.rpm/string_test   usr/lib/opa-fm/bin/
+stage.rpm/thread_test   usr/lib/opa-fm/bin/
+stage.rpm/timeget_test  usr/lib/opa-fm/bin/
+stage.rpm/xml_sample    usr/lib/opa-fm/bin/
+stage.rpm/xml_sample2   usr/lib/opa-fm/bin/
+

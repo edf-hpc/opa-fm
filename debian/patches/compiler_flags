@@ -1,0 +1,97 @@
+Make it possible to override hardcoded compiler flags. Taken from RH.
+Author: Ana Guerrero Lopez <ana@ekaia.org>
+Date: 2016-06-15
+
+diff --git a/Makerules/Target.LINUX.GNU.EM64T b/Makerules/Target.LINUX.GNU.EM64T
+index ef1a3cb..ab89655 100755
+--- a/Makerules/Target.LINUX.GNU.EM64T
++++ b/Makerules/Target.LINUX.GNU.EM64T
+@@ -75,9 +75,9 @@ CCMACH		= $(CMACH) -fcheck-new -Wno-ctor-dtor-privacy
+ CSYS		= -DLINUX -Dlinux -D__LINUX__
+ CCSYS		= $(CSYS)
+ CCLIBS		= 
+-release_CCOPT_Flags	=-O2 -fno-strength-reduce
++release_CCOPT_Flags	?=-O2 -fno-strength-reduce
+ debug_CCOPT_Flags	=
+-release_COPT_Flags	=-O2 -fno-strength-reduce
++release_COPT_Flags	?=-O2 -fno-strength-reduce
+ 0debug_COPT_Flags	=
+ # Assemble the optimization flags based upon desired build configuration.
+ CCOPT		= $($(strip $(BUILD_CONFIG))_CCOPT_Flags)
+diff --git a/Makerules/Target.LINUX.GNU.IA32 b/Makerules/Target.LINUX.GNU.IA32
+index 08683b5..1380349 100755
+--- a/Makerules/Target.LINUX.GNU.IA32
++++ b/Makerules/Target.LINUX.GNU.IA32
+@@ -76,9 +76,9 @@ CCMACH		= $(CMACH) -fcheck-new -Wno-ctor-dtor-privacy
+ CSYS		= -DLINUX -Dlinux -D__LINUX__ 
+ CCSYS		= $(CSYS)
+ CCLIBS		= 
+-release_CCOPT_Flags	=-O2 -fno-strength-reduce
++release_CCOPT_Flags	?=-O2 -fno-strength-reduce
+ debug_CCOPT_Flags	=
+-release_COPT_Flags	=-O2 -fno-strength-reduce
++release_COPT_Flags	?=-O2 -fno-strength-reduce
+ debug_COPT_Flags	=
+ # Assemble the optimization flags based upon desired build configuration.
+ CCOPT		= $($(strip $(BUILD_CONFIG))_CCOPT_Flags)
+diff --git a/Makerules/Target.LINUX.GNU.IA64 b/Makerules/Target.LINUX.GNU.IA64
+index 4ab295a..a8c0e70 100755
+--- a/Makerules/Target.LINUX.GNU.IA64
++++ b/Makerules/Target.LINUX.GNU.IA64
+@@ -75,9 +75,9 @@ CCMACH		= $(CMACH) -fcheck-new -Wno-ctor-dtor-privacy
+ CSYS		= -DLINUX -Dlinux -D__LINUX__
+ CCSYS		= $(CSYS)
+ CCLIBS		= 
+-release_CCOPT_Flags	=-O2 -funwind-tables -fno-strength-reduce
++release_CCOPT_Flags	?=-O2 -funwind-tables -fno-strength-reduce
+ debug_CCOPT_Flags	=
+-release_COPT_Flags	=-O2 -funwind-tables -fno-strength-reduce
++release_COPT_Flags	?=-O2 -funwind-tables -fno-strength-reduce
+ debug_COPT_Flags	=
+ # Assemble the optimization flags based upon desired build configuration.
+ CCOPT		= $($(strip $(BUILD_CONFIG))_CCOPT_Flags)
+diff --git a/Makerules/Target.LINUX.GNU.MIPS64 b/Makerules/Target.LINUX.GNU.MIPS64
+index 9faec53..a39290c 100755
+--- a/Makerules/Target.LINUX.GNU.MIPS64
++++ b/Makerules/Target.LINUX.GNU.MIPS64
+@@ -76,7 +76,7 @@ CCMACH		= $(CMACH) -fcheck-new -Wno-ctor-dtor-privacy
+ CSYS		=
+ CCSYS		= $(CSYS)
+ CCLIBS		= 
+-release_CCOPT_Flags	=-O
++release_CCOPT_Flags	?=-O
+ debug_CCOPT_Flags	=
+ # Assemble the optimization flags based upon desired build configuration.
+ CCOPT		= $($(strip $(BUILD_CONFIG))_CCOPT_Flags) -DLINUX -Dlinux -D__LINUX__
+diff --git a/Makerules/Target.LINUX.GNU.PPC64 b/Makerules/Target.LINUX.GNU.PPC64
+index 6fdfba6..2fd8888 100755
+--- a/Makerules/Target.LINUX.GNU.PPC64
++++ b/Makerules/Target.LINUX.GNU.PPC64
+@@ -76,9 +76,9 @@ CCMACH		=  $(CMACH) -fcheck-new -Wno-ctor-dtor-privacy -fno-rtti
+ CSYS		= -DLINUX -Dlinux -D__LINUX__ -DHAVEIOMMU
+ CCSYS		= $(CSYS)
+ CCLIBS		= 
+-release_CCOPT_Flags	= -O2 -fno-strength-reduce
++release_CCOPT_Flags	?= -O2 -fno-strength-reduce
+ debug_CCOPT_Flags	= -O0
+-release_COPT_Flags	= -O2 -fno-strength-reduce
++release_COPT_Flags	?= -O2 -fno-strength-reduce
+ debug_COPT_Flags	= -O0
+ # Assemble the optimization flags based upon desired build configuration.
+ CCOPT		= $($(strip $(BUILD_CONFIG))_CCOPT_Flags)
+diff --git a/Makerules/Target.LINUX.GNU.X86_64 b/Makerules/Target.LINUX.GNU.X86_64
+index b15f5f2..f63cb98 100755
+--- a/Makerules/Target.LINUX.GNU.X86_64
++++ b/Makerules/Target.LINUX.GNU.X86_64
+@@ -82,9 +82,9 @@ CCMACH		= $(CMACH) -fcheck-new -Wno-ctor-dtor-privacy
+ CSYS		= -DLINUX -Dlinux -D__LINUX__ 
+ CCSYS		= $(CSYS)
+ CCLIBS		= 
+-release_CCOPT_Flags	=-O3 -fno-strength-reduce -D_FORTIFY_SOURCE=2
++release_CCOPT_Flags	?=-O3 -fno-strength-reduce -D_FORTIFY_SOURCE=2
+ debug_CCOPT_Flags	= -O -D_FORTIFY_SOURCE=2
+-release_COPT_Flags	=-O3 -fno-strength-reduce -D_FORTIFY_SOURCE=2
++release_COPT_Flags	?=-O3 -fno-strength-reduce -D_FORTIFY_SOURCE=2
+ debug_COPT_Flags	= -O -D_FORTIFY_SOURCE=2
+ # Assemble the optimization flags based upon desired build configuration.
+ CCOPT		= $($(strip $(BUILD_CONFIG))_CCOPT_Flags)

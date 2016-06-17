@@ -1,0 +1,101 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: opa-fm
+Source: https://github.com/01org/opa-fm
+
+Files: Md5/Md5_Rivest.c
+ Md5/Md5_Rivest.h
+Copyright: 1990, RSA Data Security, Inc. *
+License: custom
+  License to copy and use this software is granted provided that
+  it is identified as the "RSA Data Security, Inc. MD5 Message
+  Digest Algorithm" in all material mentioning or referencing this
+  software or this function.
+  .
+  License is also granted to make and use derivative works
+  provided that such works are identified as "derived from the RSA
+  Data Security, Inc. MD5 Message Digest Algorithm" in all
+  material mentioning or referencing the derived work.
+  .
+  RSA Data Security, Inc. makes no representations concerning
+  either the merchantability of this software or the suitability
+  of this software for any particular purpose.  It is provided "as
+  is" without express or implied warranty of any kind.
+  .
+  These notices must be retained in any copies of any part of this
+  documentation and/or software.
+
+Files: Md5/Md5_Deutsch.c
+ Md5/Md5_Deutsch.h
+Copyright: 1999, Aladdin Enterprises.
+License: Zlib
+  This software is provided 'as-is', without any express or implied
+  warranty.  In no event will the authors be held liable for any damages
+  arising from the use of this software.
+  .
+  Permission is granted to anyone to use this software for any purpose,
+  including commercial applications, and to alter it and redistribute it
+  freely, subject to the following restrictions:
+  .
+  1. The origin of this software must not be misrepresented; you must not
+     claim that you wrote the original software. If you use this software
+     in a product, an acknowledgment in the product documentation would be
+     appreciated but is not required.
+  2. Altered source versions must be plainly marked as such, and must not be
+     misrepresented as being the original software.
+  3. This notice may not be removed or altered from any source distribution.
+
+Files: *
+Copyright: Copyright (c) 2015, Intel Corporation
+           Copyright: 2002, Christopher Clark
+		   Copyright (c) 2006 Mellanox Technologies.
+License: BSD-3-clause
+  Redistribution and use in source and binary forms, with or without modification,
+  are permitted provided that the following conditions are met:
+ - Redistributions of source code must retain the above copyright notice,
+   this list of conditions and the following disclaimer.
+ - Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+ - Neither the name of Intel Corporation nor the names of its contributors may
+   be used to endorse or promote products derived from this software without
+   specific prior written permission.
+ .
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ ARE DISCLAIMED. IN NO EVENT SHALL INTEL, THE COPYRIGHT OWNER OR CONTRIBUTORS
+ BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ POSSIBILITY OF SUCH DAMAGE.
+ .
+ EXPORT LAWS: THIS LICENSE ADDS NO RESTRICTIONS TO THE EXPORT LAWS OF YOUR
+ JURISDICTION. It is licensee's responsibility to comply with any export
+ regulations applicable in licensee's jurisdiction. Under CURRENT (May 2000)
+ U.S. export regulations this software is eligible for export from the U.S.
+ and can be downloaded by or otherwise exported or reexported worldwide EXCEPT
+ to U.S. embargoed destinations which include Cuba, Iraq, Libya, North Korea,
+ Iran, Syria, Sudan, Afghanistan and any other country to which the U.S. has
+ embargoed goods and services.
+
+Files: debian/*
+Copyright: 2016 Ana Guerrero Lopez <ana-externe.guerrero@edf.fr>
+License: GPL-3.0+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ .
+ This package is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <https://www.gnu.org/licenses/>.
+ .
+ On Debian systems, the complete text of the GNU General
+ Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".

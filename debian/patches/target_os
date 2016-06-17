@@ -1,0 +1,17 @@
+Set BUILD_TARGET_OS_VERSION
+Author: Ana Guerrero Lopez <ana@ekaia.org>
+Date: 2016-06-15
+
+Index: opa-fm/Esm/Makerules.project
+===================================================================
+--- opa-fm.orig/Esm/Makerules.project
++++ opa-fm/Esm/Makerules.project
+@@ -188,7 +188,7 @@ endif # VXWORKS
+ #endif # DARWIN
+ ifeq "$(BUILD_TARGET_OS)" "LINUX"
+ ifndef BUILD_TARGET_OS_VERSION
+-$(error BUILD_TARGET_OS_VERSION not defined)
++BUILD_TARGET_OS_VERSION=$(shell uname -r)
+ endif
+ ICS_KERNEL_CONF_FILE:=$(TL_DIR)/Makerules/LINUX/$(BUILD_TARGET).$(BUILD_TARGET_OS_VENDOR).$(BUILD_TARGET_OS_VERSION).h
+ endif # LINUX

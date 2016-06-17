@@ -1,0 +1,1357 @@
+Change hardcoded paths:
+    /opt/opa 	=> /usr/lib/opa-ff (for Fast Fabric)
+	/opt/opafm 	=> /usr/lib/opa-fm (for Fabric Manager)
+For now, use same paths than RedHat.
+
+Author: Ana Guerrero Lopez <ana@ekaia.org>
+Date: 2016-06-15
+diff --git a/CommonInstall/comp_delta.pl b/CommonInstall/comp_delta.pl
+index 5106b17..aff141c 100755
+--- a/CommonInstall/comp_delta.pl
++++ b/CommonInstall/comp_delta.pl
+@@ -2698,9 +2698,9 @@ sub install_opa_stack($$)
+ 
+ 	# Check $BASE_DIR directory ...exist 
+ 	check_config_dirs();
+-	check_dir("/opt/opa");
++	check_dir("/usr/lib/opa-ff");
+ 
+-	copy_systool_file("$srcdir/comp.pl", "/opt/opa/.comp_ofed_delta.pl");
++	copy_systool_file("$srcdir/comp.pl", "/usr/lib/opa-ff/.comp_ofed_delta.pl");
+ 
+ 	install_delta_comp('opa_stack', $install_list);
+ 
+@@ -2794,8 +2794,8 @@ sub uninstall_opa_stack($$)
+ 	remove_udev_permissions;
+ 
+ 	system("rm -rf $ROOT$BASE_DIR/version_delta");
+-	system("rm -rf $ROOT/opt/opa/.comp_delta.pl");
+-	system "rmdir $ROOT/opt/opa 2>/dev/null";	# remove only if empty
++	system("rm -rf $ROOT/usr/lib/opa-ff/.comp_delta.pl");
++	system "rmdir $ROOT/usr/lib/opa-ff 2>/dev/null";	# remove only if empty
+ 	system "rmdir $ROOT$BASE_DIR 2>/dev/null";	# remove only if empty
+ 	system "rmdir $ROOT$OPA_CONFIG_DIR 2>/dev/null";	# remove only if empty
+ 
+@@ -3777,9 +3777,9 @@ sub available_delta_mpisrc()
+ sub installed_delta_mpisrc()
+ {
+ 	return ((-e "$ROOT$BASE_DIR/version_delta"
+-			&& file_glob("$ROOT/opt/opa/src/MPI/mvapich*.src.rpm") ne ""
+-			&& file_glob("$ROOT/opt/opa/src/MPI/openmpi*.src.rpm") ne ""
+-			&& file_glob("$ROOT/opt/opa/src/MPI/mpitests*.src.rpm") ne ""));
++			&& file_glob("$ROOT/usr/lib/opa-ff/src/MPI/mvapich*.src.rpm") ne ""
++			&& file_glob("$ROOT/usr/lib/opa-ff/src/MPI/openmpi*.src.rpm") ne ""
++			&& file_glob("$ROOT/usr/lib/opa-ff/src/MPI/mpitests*.src.rpm") ne ""));
+ }
+ 
+ # only called if installed_delta_mpisrc is true
+@@ -3836,29 +3836,29 @@ sub install_delta_mpisrc($$)
+ 
+ 	print_install_banner_delta_comp('delta_mpisrc');
+ 	install_delta_comp('delta_mpisrc', $install_list);
+-	check_dir("/opt/opa/src");
+-	check_dir("/opt/opa/src/MPI");
++	check_dir("/usr/lib/opa-ff/src");
++	check_dir("/usr/lib/opa-ff/src/MPI");
+ 	# remove old versions (.src.rpm and built .rpm files too)
+-	system "rm -rf $ROOT/opt/opa/src/MPI/mvapich[-_]*.rpm 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/mvapich2[-_]*.rpm 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/openmpi[-_]*.rpm 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/mpitests[-_]*.rpm 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/make.*.res 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/make.*.err 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/make.*.warn 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/.mpiinfo 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/mvapich[-_]*.rpm 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/mvapich2[-_]*.rpm 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/openmpi[-_]*.rpm 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/mpitests[-_]*.rpm 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/make.*.res 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/make.*.err 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/make.*.warn 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/.mpiinfo 2>/dev/null";
+ 
+ 	# install new versions
+ 	foreach my $srpm ( "mvapich2", "openmpi", "mpitests" ) {
+ 		my $srpmfile = file_glob("$srcdir/$SRPMS_SUBDIR/${srpm}-*.src.rpm");
+ 		if ( "$srpmfile" ne "" ) {
+ 			my $file = my_basename($srpmfile);
+-			copy_data_file($srpmfile, "/opt/opa/src/MPI/$file");
++			copy_data_file($srpmfile, "/usr/lib/opa-ff/src/MPI/$file");
+ 		}
+ 	}
+-	copy_systool_file("$srcdir/do_build", "/opt/opa/src/MPI/do_build");
+-	copy_systool_file("$srcdir/do_mvapich2_build", "/opt/opa/src/MPI/do_mvapich2_build");
+-	copy_systool_file("$srcdir/do_openmpi_build", "/opt/opa/src/MPI/do_openmpi_build");
++	copy_systool_file("$srcdir/do_build", "/usr/lib/opa-ff/src/MPI/do_build");
++	copy_systool_file("$srcdir/do_mvapich2_build", "/usr/lib/opa-ff/src/MPI/do_mvapich2_build");
++	copy_systool_file("$srcdir/do_openmpi_build", "/usr/lib/opa-ff/src/MPI/do_openmpi_build");
+ 
+ 	$ComponentWasInstalled{'delta_mpisrc'}=1;
+ }
+@@ -3878,21 +3878,21 @@ sub uninstall_delta_mpisrc($$)
+ 	print_uninstall_banner_delta_comp('delta_mpisrc');
+ 
+ 	# remove old versions (.src.rpm and built .rpm files too)
+-	system "rm -rf $ROOT/opt/opa/src/MPI/mvapich2[-_]*.rpm 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/openmpi[-_]*.rpm 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/mpitests[-_]*.rpm 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/make.*.res 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/make.*.err 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/make.*.warn 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/.mpiinfo 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/do_build 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/do_mvapich2_build 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/do_openmpi_build 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/.mpiinfo 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/mvapich2[-_]*.rpm 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/openmpi[-_]*.rpm 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/mpitests[-_]*.rpm 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/make.*.res 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/make.*.err 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/make.*.warn 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/.mpiinfo 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/do_build 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/do_mvapich2_build 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/do_openmpi_build 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/.mpiinfo 2>/dev/null";
+ 
+ 	uninstall_delta_comp('delta_mpisrc', $install_list, $uninstalling_list, 'verbose');
+-	system "rmdir $ROOT/opt/opa/src/MPI 2>/dev/null"; # remove only if empty
+-	system "rmdir $ROOT/opt/opa/src 2>/dev/null"; # remove only if empty
++	system "rmdir $ROOT/usr/lib/opa-ff/src/MPI 2>/dev/null"; # remove only if empty
++	system "rmdir $ROOT/usr/lib/opa-ff/src 2>/dev/null"; # remove only if empty
+ 	$ComponentWasInstalled{'delta_mpisrc'}=0;
+ }
+ 
+diff --git a/CommonInstall/comp_fastfabric.pl b/CommonInstall/comp_fastfabric.pl
+index f097308..bb147bc 100755
+--- a/CommonInstall/comp_fastfabric.pl
++++ b/CommonInstall/comp_fastfabric.pl
+@@ -38,7 +38,7 @@ use strict;
+ # ==========================================================================
+ # Fast Fabric installation
+ 
+-my $FF_CONF_FILE = "/opt/opa/tools/opafastfabric.conf";
++my $FF_CONF_FILE = "/usr/lib/opa-ff/tools/opafastfabric.conf";
+ my $FF_TLS_CONF_FILE = "/etc/sysconfig/opa/opaff.xml";
+ sub available_fastfabric
+ {
+@@ -118,20 +118,20 @@ sub install_fastfabric
+ 		LogPrint "Installing $ComponentInfo{'fastfabric'}{'Name'} $version $DBG_FREE for $CUR_DISTRO_VENDOR $CUR_VENDOR_VER\n";
+ 	check_config_dirs();
+ 	if ( -e "$srcdir/comp.pl" ) {
+-		check_dir("/opt/opa");
+-		copy_systool_file("$srcdir/comp.pl", "/opt/opa/.comp_fastfabric.pl");
++		check_dir("/usr/lib/opa-ff");
++		copy_systool_file("$srcdir/comp.pl", "/usr/lib/opa-ff/.comp_fastfabric.pl");
+ 	}
+ 
+ 	my $rpmfile = rpm_resolve("$srcdir/RPMS/*/", "any", "opa-fastfabric");
+ 	rpm_run_install($rpmfile, "any", " -U ");
+ 
+-	check_dir("/opt/opa/tools");
+-	check_dir("/opt/opa/samples");
+-	system "chmod ug+x $ROOT/opt/opa/samples/hostverify.sh";
+-	system "rm -f $ROOT/opt/opa/samples/nodeverify.sh";
++	check_dir("/usr/lib/opa-ff/tools");
++	check_dir("/usr/lib/opa-ff/samples");
++	system "chmod ug+x $ROOT/usr/lib/opa-ff/samples/hostverify.sh";
++	system "rm -f $ROOT/usr/lib/opa-ff/samples/nodeverify.sh";
+ 
+ 	check_rpm_config_file("$FF_TLS_CONF_FILE");
+-	printf("Default opaff.xml can be found in '/opt/opa/samples/opaff.xml-sample'\n");
++	printf("Default opaff.xml can be found in '/usr/lib/opa-ff/samples/opaff.xml-sample'\n");
+ 	check_rpm_config_file("$CONFIG_DIR/opa/opamon.conf");
+ 	check_rpm_config_file("$CONFIG_DIR/opa/opafastfabric.conf");
+ 	check_rpm_config_file("$CONFIG_DIR/opa/allhosts");
+@@ -139,7 +139,7 @@ sub install_fastfabric
+ 	check_rpm_config_file("$CONFIG_DIR/opa/hosts");
+ 	check_rpm_config_file("$CONFIG_DIR/opa/ports");
+ 	check_rpm_config_file("$CONFIG_DIR/opa/switches");
+-	check_rpm_config_file("/opt/opa/tools/osid_wrapper");
++	check_rpm_config_file("/usr/lib/opa-ff/tools/osid_wrapper");
+ 
+ 	#install_conf_file("$ComponentInfo{'fastfabric'}{'Name'}", "$FF_TLS_CONF_FILE", "$srcdir/fastfabric/tools/tls");
+ 	#remove_conf_file("$ComponentInfo{'fastfabric'}{'Name'}", "$OPA_CONFIG_DIR/iba_stat.conf");
+@@ -179,11 +179,11 @@ sub uninstall_fastfabric
+ 
+ 	# remove samples we installed (or user compiled), however do not remove
+ 	# any logs or other files the user may have created
+-	remove_installed_files "/opt/opa/samples";
+-	system "rmdir $ROOT/opt/opa/samples 2>/dev/null";	# remove only if empty
++	remove_installed_files "/usr/lib/opa-ff/samples";
++	system "rmdir $ROOT/usr/lib/opa-ff/samples 2>/dev/null";	# remove only if empty
+ 
+-	system("rm -rf $ROOT/opt/opa/.comp_fastfabric.pl");
+-	system "rmdir $ROOT/opt/opa 2>/dev/null";	# remove only if empty
++	system("rm -rf $ROOT/usr/lib/opa-ff/.comp_fastfabric.pl");
++	system "rmdir $ROOT/usr/lib/opa-ff 2>/dev/null";	# remove only if empty
+ 	system "rmdir $ROOT$BASE_DIR 2>/dev/null";	# remove only if empty
+ 	system "rmdir $ROOT$OPA_CONFIG_DIR 2>/dev/null";	# remove only if empty
+ 	$ComponentWasInstalled{'fastfabric'}=0;
+diff --git a/CommonInstall/comp_ibdev.pl b/CommonInstall/comp_ibdev.pl
+index 2305b3c..fede0e6 100755
+--- a/CommonInstall/comp_ibdev.pl
++++ b/CommonInstall/comp_ibdev.pl
+@@ -116,12 +116,12 @@ sub install_ibdev
+ 	# remove samples installed in old location
+ 	remove_installed_files "/usr/local/src/iba_samples";
+ 	# Copy all ib sample applications
+-	check_dir("/opt/opa/src");
+-	check_dir("/opt/opa/src/iba_samples");
+-	copy_all_data_files("$srcdir/iba_samples", "/opt/opa/src/iba_samples");
+-	system "cd $ROOT/opt/opa/src/iba_samples; find . -type d| while read dir; do mv \$dir/Makefile.sample \$dir/Makefile 2>/dev/null; done 2>/dev/null";
+-	system "cd $srcdir/iba_samples; find . | sed -e 's/Makefile.sample/Makefile/' > $ROOT/opt/opa/src/iba_samples/.files 2>/dev/null";
+-	system "cd $srcdir/iba_samples; find * -maxdepth 1 -type d > $ROOT/opt/opa/src/iba_samples/.dirs 2>/dev/null";
++	check_dir("/usr/lib/opa-ff/src");
++	check_dir("/usr/lib/opa-ff/src/iba_samples");
++	copy_all_data_files("$srcdir/iba_samples", "/usr/lib/opa-ff/src/iba_samples");
++	system "cd $ROOT/usr/lib/opa-ff/src/iba_samples; find . -type d| while read dir; do mv \$dir/Makefile.sample \$dir/Makefile 2>/dev/null; done 2>/dev/null";
++	system "cd $srcdir/iba_samples; find . | sed -e 's/Makefile.sample/Makefile/' > $ROOT/usr/lib/opa-ff/src/iba_samples/.files 2>/dev/null";
++	system "cd $srcdir/iba_samples; find * -maxdepth 1 -type d > $ROOT/usr/lib/opa-ff/src/iba_samples/.dirs 2>/dev/null";
+ 	$ComponentWasInstalled{'ibdev'}=1;
+ }
+ 
+@@ -148,9 +148,9 @@ sub uninstall_ibdev
+ 	system "rm -rf $ROOT/usr/include/ipoib_export.h";
+ 	# remove iba_samples we installed or user compiled, however do not remove
+ 	# any logs or other files the user may have created
+-	remove_installed_files "/opt/opa/src/iba_samples";
+-	system "rmdir $ROOT/opt/opa/src 2>/dev/null";
+-	system "rmdir $ROOT/opt/opa 2>/dev/null";
++	remove_installed_files "/usr/lib/opa-ff/src/iba_samples";
++	system "rmdir $ROOT/usr/lib/opa-ff/src 2>/dev/null";
++	system "rmdir $ROOT/usr/lib/opa-ff 2>/dev/null";
+ 	remove_installed_files "/usr/local/src/iba_samples";
+ 	$ComponentWasInstalled{'ibdev'}=0;
+ }
+diff --git a/CommonInstall/comp_ofed.pl b/CommonInstall/comp_ofed.pl
+index 7afa1d3..f2e9c11 100755
+--- a/CommonInstall/comp_ofed.pl
++++ b/CommonInstall/comp_ofed.pl
+@@ -2631,9 +2631,9 @@ sub install_opa_stack($$)
+ 
+ 	# Check $BASE_DIR directory ...exist 
+ 	check_config_dirs();
+-	check_dir("/opt/opa");
++	check_dir("/usr/lib/opa-ff");
+ 
+-	copy_systool_file("$srcdir/comp.pl", "/opt/opa/.comp_ofed.pl");
++	copy_systool_file("$srcdir/comp.pl", "/usr/lib/opa-ff/.comp_ofed.pl");
+ 
+ 	install_ofed_comp('opa_stack', $install_list);
+ 
+@@ -2732,8 +2732,8 @@ sub uninstall_opa_stack($$)
+ 	remove_udev_permissions;
+ 
+ 	system("rm -rf $ROOT$BASE_DIR/version_ofed");
+-	system("rm -rf $ROOT/opt/opa/.comp_ofed.pl");
+-	system "rmdir $ROOT/opt/opa 2>/dev/null";	# remove only if empty
++	system("rm -rf $ROOT/usr/lib/opa-ff/.comp_ofed.pl");
++	system "rmdir $ROOT/usr/lib/opa-ff 2>/dev/null";	# remove only if empty
+ 	system "rmdir $ROOT$BASE_DIR 2>/dev/null";	# remove only if empty
+ 	system "rmdir $ROOT$OPA_CONFIG_DIR 2>/dev/null";	# remove only if empty
+ 	if (0 != uninstall_old_stacks(0)) {
+@@ -3995,9 +3995,9 @@ sub available_ofed_mpisrc()
+ sub installed_ofed_mpisrc()
+ {
+ 	return ((-e "$ROOT$BASE_DIR/version_ofed"
+-			&& file_glob("$ROOT/opt/opa/src/MPI/mvapich*.src.rpm") ne ""
+-			&& file_glob("$ROOT/opt/opa/src/MPI/openmpi*.src.rpm") ne ""
+-			&& file_glob("$ROOT/opt/opa/src/MPI/mpitests*.src.rpm") ne ""));
++			&& file_glob("$ROOT/usr/lib/opa-ff/src/MPI/mvapich*.src.rpm") ne ""
++			&& file_glob("$ROOT/usr/lib/opa-ff/src/MPI/openmpi*.src.rpm") ne ""
++			&& file_glob("$ROOT/usr/lib/opa-ff/src/MPI/mpitests*.src.rpm") ne ""));
+ }
+ 
+ # only called if installed_ofed_mpisrc is true
+@@ -4054,29 +4054,29 @@ sub install_ofed_mpisrc($$)
+ 
+ 	print_install_banner_ofed_comp('ofed_mpisrc');
+ 	install_ofed_comp('ofed_mpisrc', $install_list);
+-	check_dir("/opt/opa/src");
+-	check_dir("/opt/opa/src/MPI");
++	check_dir("/usr/lib/opa-ff/src");
++	check_dir("/usr/lib/opa-ff/src/MPI");
+ 	# remove old versions (.src.rpm and built .rpm files too)
+-	system "rm -rf $ROOT/opt/opa/src/MPI/mvapich[-_]*.rpm 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/mvapich2[-_]*.rpm 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/openmpi[-_]*.rpm 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/mpitests[-_]*.rpm 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/make.*.res 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/make.*.err 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/make.*.warn 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/.mpiinfo 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/mvapich[-_]*.rpm 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/mvapich2[-_]*.rpm 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/openmpi[-_]*.rpm 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/mpitests[-_]*.rpm 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/make.*.res 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/make.*.err 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/make.*.warn 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/.mpiinfo 2>/dev/null";
+ 
+ 	# install new versions
+ 	foreach my $srpm ( "mvapich2", "openmpi", "mpitests" ) {
+ 		my $srpmfile = file_glob("$srcdir/$SRPMS_SUBDIR/${srpm}-*.src.rpm");
+ 		if ( "$srpmfile" ne "" ) {
+ 			my $file = my_basename($srpmfile);
+-			copy_data_file($srpmfile, "/opt/opa/src/MPI/$file");
++			copy_data_file($srpmfile, "/usr/lib/opa-ff/src/MPI/$file");
+ 		}
+ 	}
+-	copy_systool_file("$srcdir/do_build", "/opt/opa/src/MPI/do_build");
+-	copy_systool_file("$srcdir/do_mvapich2_build", "/opt/opa/src/MPI/do_mvapich2_build");
+-	copy_systool_file("$srcdir/do_openmpi_build", "/opt/opa/src/MPI/do_openmpi_build");
++	copy_systool_file("$srcdir/do_build", "/usr/lib/opa-ff/src/MPI/do_build");
++	copy_systool_file("$srcdir/do_mvapich2_build", "/usr/lib/opa-ff/src/MPI/do_mvapich2_build");
++	copy_systool_file("$srcdir/do_openmpi_build", "/usr/lib/opa-ff/src/MPI/do_openmpi_build");
+ 
+ 	$ComponentWasInstalled{'ofed_mpisrc'}=1;
+ }
+@@ -4096,21 +4096,21 @@ sub uninstall_ofed_mpisrc($$)
+ 	print_uninstall_banner_ofed_comp('ofed_mpisrc');
+ 
+ 	# remove old versions (.src.rpm and built .rpm files too)
+-	system "rm -rf $ROOT/opt/opa/src/MPI/mvapich2[-_]*.rpm 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/openmpi[-_]*.rpm 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/mpitests[-_]*.rpm 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/make.*.res 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/make.*.err 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/make.*.warn 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/.mpiinfo 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/do_build 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/do_mvapich2_build 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/do_openmpi_build 2>/dev/null";
+-	system "rm -rf $ROOT/opt/opa/src/MPI/.mpiinfo 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/mvapich2[-_]*.rpm 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/openmpi[-_]*.rpm 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/mpitests[-_]*.rpm 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/make.*.res 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/make.*.err 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/make.*.warn 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/.mpiinfo 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/do_build 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/do_mvapich2_build 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/do_openmpi_build 2>/dev/null";
++	system "rm -rf $ROOT/usr/lib/opa-ff/src/MPI/.mpiinfo 2>/dev/null";
+ 
+ 	uninstall_ofed_comp('ofed_mpisrc', $install_list, $uninstalling_list, 'verbose');
+-	system "rmdir $ROOT/opt/opa/src/MPI 2>/dev/null"; # remove only if empty
+-	system "rmdir $ROOT/opt/opa/src 2>/dev/null"; # remove only if empty
++	system "rmdir $ROOT/usr/lib/opa-ff/src/MPI 2>/dev/null"; # remove only if empty
++	system "rmdir $ROOT/usr/lib/opa-ff/src 2>/dev/null"; # remove only if empty
+ 	$ComponentWasInstalled{'ofed_mpisrc'}=0;
+ }
+ 
+diff --git a/CommonInstall/comp_oftools.pl b/CommonInstall/comp_oftools.pl
+index 25660d0..a2c1998 100755
+--- a/CommonInstall/comp_oftools.pl
++++ b/CommonInstall/comp_oftools.pl
+@@ -117,11 +117,11 @@ sub install_oftools
+ 	check_config_dirs();
+ 
+ 	if ( -e "$srcdir/comp.pl" ) {
+-		check_dir("/opt/opa");
+-		copy_systool_file("$srcdir/comp.pl", "/opt/opa/.comp_oftools.pl");
++		check_dir("/usr/lib/opa-ff");
++		copy_systool_file("$srcdir/comp.pl", "/usr/lib/opa-ff/.comp_oftools.pl");
+ 	}
+-	check_dir("/opt/opa/tools");
+-	check_dir("/opt/opa/samples");
++	check_dir("/usr/lib/opa-ff/tools");
++	check_dir("/usr/lib/opa-ff/samples");
+ 
+ 	my $rpmfile = rpm_resolve("$srcdir/RPMS/*/", "any", "opa-basic-tools");
+ 	rpm_run_install($rpmfile, "any", " -U ");
+@@ -156,21 +156,21 @@ sub uninstall_oftools
+ 	rpm_uninstall_list("any", "verbose", ("opa-basic-tools", "opa-address-resolution") );
+ 
+ 	# remove LSF and Moab related files
+-	system("rm -rf $ROOT/opt/opa/LSF_scripts");
+-	system("rm -rf $ROOT/opt/opa/Moab_scripts");
++	system("rm -rf $ROOT/usr/lib/opa-ff/LSF_scripts");
++	system("rm -rf $ROOT/usr/lib/opa-ff/Moab_scripts");
+ 
+ 	# may be created by opaverifyhosts
+-	system("rm -rf $ROOT/opt/opa/tools/nodescript.sh");
+-	system("rm -rf $ROOT/opt/opa/tools/nodeverify.sh");
++	system("rm -rf $ROOT/usr/lib/opa-ff/tools/nodescript.sh");
++	system("rm -rf $ROOT/usr/lib/opa-ff/tools/nodeverify.sh");
+ 
+-	system "rmdir $ROOT/opt/opa/tools 2>/dev/null";	# remove only if empty
++	system "rmdir $ROOT/usr/lib/opa-ff/tools 2>/dev/null";	# remove only if empty
+ 
+ 	# oftools is a prereq of fastfabric can cleanup shared files here
+ 	system("rm -rf $ROOT$BASE_DIR/version_ff");
+ 	system "rmdir $ROOT$BASE_DIR 2>/dev/null";	# remove only if empty
+ 	system "rmdir $ROOT$OPA_CONFIG_DIR 2>/dev/null";	# remove only if empty
+-	system("rm -rf $ROOT/opt/opa/.comp_oftools.pl");
+-	system "rmdir $ROOT/opt/opa 2>/dev/null";	# remove only if empty
++	system("rm -rf $ROOT/usr/lib/opa-ff/.comp_oftools.pl");
++	system "rmdir $ROOT/usr/lib/opa-ff 2>/dev/null";	# remove only if empty
+ 	$ComponentWasInstalled{'oftools'}=0;
+ }
+ 
+diff --git a/CommonInstall/comp_omnipath.pl b/CommonInstall/comp_omnipath.pl
+index 3ace8d2..1053605 100644
+--- a/CommonInstall/comp_omnipath.pl
++++ b/CommonInstall/comp_omnipath.pl
+@@ -75,7 +75,7 @@ sub install_generic_mpi
+     #    rpm_install("$srcdir/OtherMPIs", "user", "$mpifullname");
+     #}
+     check_dir ("/opt/iba");
+-    copy_systool_file ("$srcdir/comp.pl", "/opt/opa/.comp_$mpifullname.pl");
++    copy_systool_file ("$srcdir/comp.pl", "/usr/lib/opa-ff/.comp_$mpifullname.pl");
+     
+     $ComponentWasInstalled{$mpifullname} = 1;
+ }
+@@ -86,7 +86,7 @@ sub installed_generic_mpi
+     my $compiler = $_[1];
+     my $mpifullname = "$mpiname"."_$compiler"."_hfi";
+ 
+-    return ( -e "$ROOT/opt/opa/.comp_$mpifullname.pl"
++    return ( -e "$ROOT/usr/lib/opa-ff/.comp_$mpifullname.pl"
+ 		   	|| rpm_is_installed ($mpifullname, "user") );
+ }
+ 
+@@ -126,8 +126,8 @@ sub uninstall_generic_mpi
+ 	}
+     }
+     
+-    system ("rm -rf $ROOT/opt/opa/.comp_$mpifullname.pl");
+-    system ("rmdir $ROOT/opt/opa 2>/dev/null"); # remove only if empty
++    system ("rm -rf $ROOT/usr/lib/opa-ff/.comp_$mpifullname.pl");
++    system ("rmdir $ROOT/usr/lib/opa-ff 2>/dev/null"); # remove only if empty
+     $ComponentWasInstalled{$mpifullname} = 0;
+ }
+ 
+diff --git a/CommonInstall/comp_qlgc_fm.pl b/CommonInstall/comp_qlgc_fm.pl
+index 0050a20..2e8b526 100755
+--- a/CommonInstall/comp_qlgc_fm.pl
++++ b/CommonInstall/comp_qlgc_fm.pl
+@@ -61,7 +61,7 @@ sub disable_autostart2_opafm()
+ 
+ sub start_opafm
+ {
+-	start_utility($ComponentInfo{'opafm'}{'Name'}, "/opt/opafm/runtime", "sm", "opafm");
++	start_utility($ComponentInfo{'opafm'}{'Name'}, "/usr/lib/opa-fm/runtime", "sm", "opafm");
+ }
+ 
+ sub stop_opafm
+@@ -158,8 +158,8 @@ sub install_opafm
+ 	}
+ 
+ 	check_rpm_config_file("$CONFIG_DIR/opafm.xml");
+-	check_dir("/opt/opa");
+-	copy_systool_file("$srcdir/comp.pl", "/opt/opa/.comp_opafm.pl");
++	check_dir("/usr/lib/opa-ff");
++	copy_systool_file("$srcdir/comp.pl", "/usr/lib/opa-ff/.comp_opafm.pl");
+ 
+ 	if ($fm_start) {
+ 		enable_autostart("opafm");
+@@ -185,9 +185,9 @@ sub uninstall_opafm
+ 	NormalPrint("Uninstalling $ComponentInfo{'opafm'}{'Name'}...\n");
+ 
+ 	rpm_uninstall_list("any", "verbose", ( "opa-fm", "opa-fm-debuginfo") );
+-	system("rm -rf $ROOT/opt/opa/.comp_opafm.pl");
++	system("rm -rf $ROOT/usr/lib/opa-ff/.comp_opafm.pl");
+ 	system("rmdir -p $ROOT/opt/iba/fm_tools 2>/dev/null");  # remove only if empty
+-	system("rm -rf $ROOT/opt/opafm");
++	system("rm -rf $ROOT/usr/lib/opa-fm");
+ 	$ComponentWasInstalled{'opafm'}=0;
+ }
+ 
+diff --git a/CommonInstall/do_build.sh b/CommonInstall/do_build.sh
+index 8b4168e..bea5f4d 100755
+--- a/CommonInstall/do_build.sh
++++ b/CommonInstall/do_build.sh
+@@ -61,7 +61,7 @@ Usage()
+ 	echo "            Default is '/'" >&2
+ 	echo "" >&2
+ 	echo "The RPMs built during this process will be installed on this system" >&2
+-	echo "they can also be found in /opt/opa/src/MPI" >&2
++	echo "they can also be found in /usr/lib/opa-ff/src/MPI" >&2
+ 	exit 2
+ }
+ 
+@@ -85,10 +85,10 @@ then
+ 	echo "You must be 'root' to run this program" >&2
+ 	exit 1
+ fi
+-cd /opt/opa/src/MPI
++cd /usr/lib/opa-ff/src/MPI
+ if [ $? != 0 ]
+ then
+-	echo "Unable to cd to /opt/opa/src/MPI" >&2
++	echo "Unable to cd to /usr/lib/opa-ff/src/MPI" >&2
+ 	exit 1
+ fi
+ 
+diff --git a/CommonInstall/do_mvapich2_build.sh b/CommonInstall/do_mvapich2_build.sh
+index 003a45c..b0bab79 100755
+--- a/CommonInstall/do_mvapich2_build.sh
++++ b/CommonInstall/do_mvapich2_build.sh
+@@ -116,7 +116,7 @@ Usage()
+ 	echo "            Default is '/'" >&2
+ 	echo "" >&2
+ 	echo "The RPMs built during this process will be installed on this system" >&2
+-	echo "they can also be found in /opt/opa/src/MPI" >&2
++	echo "they can also be found in /usr/lib/opa-ff/src/MPI" >&2
+ 	exit 2
+ }
+ 
+@@ -208,10 +208,10 @@ then
+ fi
+ if [ "$iflag" = n ]
+ then
+-	cd /opt/opa/src/MPI
++	cd /usr/lib/opa-ff/src/MPI
+ 	if [ $? != 0 ]
+ 	then
+-		echo "ERROR: Unable to cd to /opt/opa/src/MPI" >&2
++		echo "ERROR: Unable to cd to /usr/lib/opa-ff/src/MPI" >&2
+ 		exit 1
+ 	fi
+ fi
+@@ -413,11 +413,11 @@ logfile=make.mvapich2.$interface.$compiler
+ 	BUILD_DIR=${BUILD_DIR:-/var/tmp/Intel-mvapich2}
+ 	BUILD_ROOT="$BUILD_DIR/build";
+ 	RPM_DIR="$BUILD_DIR/OFEDRPMS";
+-	DESTDIR=/opt/opa/src/MPI
++	DESTDIR=/usr/lib/opa-ff/src/MPI
+ 	if [ "$iflag" = n ]
+ 	then
+-	    mvapich2_srpm=/opt/opa/src/MPI/mvapich2-*.src.rpm
+-	    mpitests_srpm=/opt/opa/src/MPI/mpitests-*.src.rpm
++	    mvapich2_srpm=/usr/lib/opa-ff/src/MPI/mvapich2-*.src.rpm
++	    mpitests_srpm=/usr/lib/opa-ff/src/MPI/mpitests-*.src.rpm
+ 	else
+ 	    mvapich2_srpm=./SRPMS/mvapich2-*.src.rpm
+ 	    mpitests_srpm=./SRPMS/mpitests-*.src.rpm
+@@ -456,10 +456,10 @@ logfile=make.mvapich2.$interface.$compiler
+ 	echo "=========================================================="
+ 	if [ "$iflag" = n ]
+ 	then
+-		echo "MPICH_PREFIX='$MPICH_PREFIX'"> /opt/opa/src/MPI/.mpiinfo
+-		#echo "MPI_RUNTIME='$MPICH_PREFIX/bin $MPICH_PREFIX/lib $MPICH_PREFIX/tests'">> /opt/opa/src/MPI/.mpiinfo
+-		echo "MPI_RPMS='mvapich2_$compiler$mvapich2_rpm_suffix-$mvapich2_fullversion.$target_cpu.rpm mpitests_mvapich2_$compiler$mvapich2_rpm_suffix-$mpitests_fullversion.$target_cpu.rpm'">> /opt/opa/src/MPI/.mpiinfo
+-		chmod +x /opt/opa/src/MPI/.mpiinfo
++		echo "MPICH_PREFIX='$MPICH_PREFIX'"> /usr/lib/opa-ff/src/MPI/.mpiinfo
++		#echo "MPI_RUNTIME='$MPICH_PREFIX/bin $MPICH_PREFIX/lib $MPICH_PREFIX/tests'">> /usr/lib/opa-ff/src/MPI/.mpiinfo
++		echo "MPI_RPMS='mvapich2_$compiler$mvapich2_rpm_suffix-$mvapich2_fullversion.$target_cpu.rpm mpitests_mvapich2_$compiler$mvapich2_rpm_suffix-$mpitests_fullversion.$target_cpu.rpm'">> /usr/lib/opa-ff/src/MPI/.mpiinfo
++		chmod +x /usr/lib/opa-ff/src/MPI/.mpiinfo
+ 	fi
+ 
+ 	echo
+diff --git a/CommonInstall/do_openmpi_build.sh b/CommonInstall/do_openmpi_build.sh
+index 310b6f2..cb9cc7d 100755
+--- a/CommonInstall/do_openmpi_build.sh
++++ b/CommonInstall/do_openmpi_build.sh
+@@ -116,7 +116,7 @@ Usage()
+ 	echo "            Default is '/'" >&2
+ 	echo "" >&2
+ 	echo "The RPMs built during this process will be installed on this system" >&2
+-	echo "they can also be found in /opt/opa/src/MPI" >&2
++	echo "they can also be found in /usr/lib/opa-ff/src/MPI" >&2
+ 	exit 2
+ }
+ 
+@@ -205,10 +205,10 @@ then
+ fi
+ if [ "$iflag" = n ]
+ then
+-	cd /opt/opa/src/MPI
++	cd /usr/lib/opa-ff/src/MPI
+ 	if [ $? != 0 ]
+ 	then
+-		echo "ERROR: Unable to cd to /opt/opa/src/MPI" >&2
++		echo "ERROR: Unable to cd to /usr/lib/opa-ff/src/MPI" >&2
+ 		exit 1
+ 	fi
+ fi
+@@ -350,11 +350,11 @@ logfile=make.openmpi.$interface.$compiler
+ 	BUILD_DIR=${BUILD_DIR:-/var/tmp/Intel-openmpi}
+ 	BUILD_ROOT="$BUILD_DIR/build";
+ 	RPM_DIR="$BUILD_DIR/OFEDRPMS";
+-	DESTDIR=/opt/opa/src/MPI
++	DESTDIR=/usr/lib/opa-ff/src/MPI
+ 	if [ "$iflag" = n ]
+ 	then
+-		openmpi_srpm=/opt/opa/src/MPI/openmpi-*.src.rpm
+-		mpitests_srpm=/opt/opa/src/MPI/mpitests-*.src.rpm
++		openmpi_srpm=/usr/lib/opa-ff/src/MPI/openmpi-*.src.rpm
++		mpitests_srpm=/usr/lib/opa-ff/src/MPI/mpitests-*.src.rpm
+ 	else
+ 		openmpi_srpm=./SRPMS/openmpi-*.src.rpm
+ 		mpitests_srpm=./SRPMS/mpitests-*.src.rpm
+@@ -393,10 +393,10 @@ logfile=make.openmpi.$interface.$compiler
+ 	echo "=========================================================="
+ 	if [ "$iflag" = n ]
+ 	then
+-		echo "MPICH_PREFIX='$MPICH_PREFIX'"> /opt/opa/src/MPI/.mpiinfo
+-		#echo "MPI_RUNTIME='$MPICH_PREFIX/bin $MPICH_PREFIX/lib* $MPICH_PREFIX/etc $MPICH_PREFIX/share $MPICH_PREFIX/tests'">> /opt/opa/src/MPI/.mpiinfo
+-		echo "MPI_RPMS='openmpi_$compiler$openmpi_rpm_suffix-$openmpi_fullversion.$target_cpu.rpm mpitests_openmpi_$compiler$openmpi_rpm_suffix-$mpitests_fullversion.$target_cpu.rpm'">> /opt/opa/src/MPI/.mpiinfo
+-		chmod +x /opt/opa/src/MPI/.mpiinfo
++		echo "MPICH_PREFIX='$MPICH_PREFIX'"> /usr/lib/opa-ff/src/MPI/.mpiinfo
++		#echo "MPI_RUNTIME='$MPICH_PREFIX/bin $MPICH_PREFIX/lib* $MPICH_PREFIX/etc $MPICH_PREFIX/share $MPICH_PREFIX/tests'">> /usr/lib/opa-ff/src/MPI/.mpiinfo
++		echo "MPI_RPMS='openmpi_$compiler$openmpi_rpm_suffix-$openmpi_fullversion.$target_cpu.rpm mpitests_openmpi_$compiler$openmpi_rpm_suffix-$mpitests_fullversion.$target_cpu.rpm'">> /usr/lib/opa-ff/src/MPI/.mpiinfo
++		chmod +x /usr/lib/opa-ff/src/MPI/.mpiinfo
+ 	fi
+ 
+ 	echo
+diff --git a/CommonInstall/main_delta.pl b/CommonInstall/main_delta.pl
+index 1b8c063..431cdab 100755
+--- a/CommonInstall/main_delta.pl
++++ b/CommonInstall/main_delta.pl
+@@ -533,7 +533,7 @@ sub Usage
+ 		printf STDERR "            default options and no change to autostart options\n";
+ 		printf STDERR "       -i comp - install the given component with default options\n";
+ 		printf STDERR "            can appear more than once on command line\n";
+-		#printf STDERR "       -l - skip creating/removing symlinks to /usr/local from /opt/opa\n";
++		#printf STDERR "       -l - skip creating/removing symlinks to /usr/local from /usr/lib/opa-ff\n";
+ 		printf STDERR "       --user_configure_options 'options' - specify additional OFA build\n";
+ 		printf STDERR "             options for user space srpms.  Causes rebuild of all user srpms\n";
+ 		printf STDERR "       --kernel_configure_options 'options' - specify additional OFA build\n";
+diff --git a/CommonInstall/main_ofed.pl b/CommonInstall/main_ofed.pl
+index cd6c432..375a953 100755
+--- a/CommonInstall/main_ofed.pl
++++ b/CommonInstall/main_ofed.pl
+@@ -495,7 +495,7 @@ sub Usage
+ 		printf STDERR "            default options and no change to autostart options\n";
+ 		printf STDERR "       -i comp - install the given component with default options\n";
+ 		printf STDERR "            can appear more than once on command line\n";
+-		#printf STDERR "       -l - skip creating/removing symlinks to /usr/local from /opt/opa\n";
++		#printf STDERR "       -l - skip creating/removing symlinks to /usr/local from /usr/lib/opa-ff\n";
+ 		printf STDERR "       --user_configure_options 'options' - specify additional OFED build\n";
+ 		printf STDERR "             options for user space srpms.  Causes rebuild of all user srpms\n";
+ 		printf STDERR "       --kernel_configure_options 'options' - specify additional OFED build\n";
+diff --git a/CommonInstall/main_omnipathwrap.pl b/CommonInstall/main_omnipathwrap.pl
+index 22dc500..82d6f7a 100644
+--- a/CommonInstall/main_omnipathwrap.pl
++++ b/CommonInstall/main_omnipathwrap.pl
+@@ -556,16 +556,16 @@ sub source_comp
+ 			LogPrint "Loaded $ComponentInfo{$comp}{'Name'} script: $ComponentInfo{$comp}{'SrcDir'}/comp.pl\n";
+ 		}
+ 		#eval "available_$comp";
+-	} elsif ( -e "$ROOT/opt/opa/.comp_$comp.pl" ) {
++	} elsif ( -e "$ROOT/usr/lib/opa-ff/.comp_$comp.pl" ) {
+ 		# source the installed file, mainly to aid uninstall
+-		#print "$ROOT/opt/opa/.comp_$comp.pl\n"; sleep 10;
+-		eval `cat "$ROOT/opt/opa/.comp_$comp.pl"`;
++		#print "$ROOT/usr/lib/opa-ff/.comp_$comp.pl\n"; sleep 10;
++		eval `cat "$ROOT/usr/lib/opa-ff/.comp_$comp.pl"`;
+ 		if ( "$@" ne "" ) {
+ 			NormalPrint "$@\n";
+-			NormalPrint "Warning: Ignoring Corrupted $ComponentInfo{$comp}{'Name'} script: $ROOT/opt/opa/.comp_$comp.pl\n";
++			NormalPrint "Warning: Ignoring Corrupted $ComponentInfo{$comp}{'Name'} script: $ROOT/usr/lib/opa-ff/.comp_$comp.pl\n";
+ 			HitKeyCont;
+ 		} else {
+-			LogPrint "Loaded $ComponentInfo{$comp}{'Name'} script: $ROOT/opt/opa/.comp_$comp.pl\n";
++			LogPrint "Loaded $ComponentInfo{$comp}{'Name'} script: $ROOT/usr/lib/opa-ff/.comp_$comp.pl\n";
+ 		}
+ 	} else {
+ 		# component not available and not installed
+@@ -632,7 +632,7 @@ sub Usage
+ 		printf STDERR "       -i comp - install the given component with default options\n";
+ 		printf STDERR "            can appear more than once on command line\n";
+ #		printf STDERR "       -f - skip HCA firmware upgrade during install\n";
+-		#printf STDERR "       -l - skip creating/removing symlinks to /usr/local from /opt/opa\n";
++		#printf STDERR "       -l - skip creating/removing symlinks to /usr/local from /usr/lib/opa-ff\n";
+ 		printf STDERR "       --user_configure_options 'options' - specify additional OFA build\n";
+ 		printf STDERR "             options for user space srpms.  Causes rebuild of all user srpms\n";
+ 		printf STDERR "       --kernel_configure_options 'options' - specify additional OFA build\n";
+diff --git a/CommonInstall/main_omnipathwrap_delta.pl b/CommonInstall/main_omnipathwrap_delta.pl
+index afd4449..dd0c6b0 100644
+--- a/CommonInstall/main_omnipathwrap_delta.pl
++++ b/CommonInstall/main_omnipathwrap_delta.pl
+@@ -739,16 +739,16 @@ sub source_comp
+ 			LogPrint "Loaded $ComponentInfo{$comp}{'Name'} script: $ComponentInfo{$comp}{'SrcDir'}/comp.pl\n";
+ 		}
+ 		#eval "available_$comp";
+-	} elsif ( -e "$ROOT/opt/opa/.comp_$comp.pl" ) {
++	} elsif ( -e "$ROOT/usr/lib/opa-ff/.comp_$comp.pl" ) {
+ 		# source the installed file, mainly to aid uninstall
+-		#print "$ROOT/opt/opa/.comp_$comp.pl\n"; sleep 10;
+-		eval `cat "$ROOT/opt/opa/.comp_$comp.pl"`;
++		#print "$ROOT/usr/lib/opa-ff/.comp_$comp.pl\n"; sleep 10;
++		eval `cat "$ROOT/usr/lib/opa-ff/.comp_$comp.pl"`;
+ 		if ( "$@" ne "" ) {
+ 			NormalPrint "$@\n";
+-			NormalPrint "Warning: Ignoring Corrupted $ComponentInfo{$comp}{'Name'} script: $ROOT/opt/opa/.comp_$comp.pl\n";
++			NormalPrint "Warning: Ignoring Corrupted $ComponentInfo{$comp}{'Name'} script: $ROOT/usr/lib/opa-ff/.comp_$comp.pl\n";
+ 			HitKeyCont;
+ 		} else {
+-			LogPrint "Loaded $ComponentInfo{$comp}{'Name'} script: $ROOT/opt/opa/.comp_$comp.pl\n";
++			LogPrint "Loaded $ComponentInfo{$comp}{'Name'} script: $ROOT/usr/lib/opa-ff/.comp_$comp.pl\n";
+ 		}
+ 	} else {
+ 		# component not available and not installed
+@@ -817,7 +817,7 @@ sub Usage
+ 		printf STDERR "       -i comp - install the given component with default options\n";
+ 		printf STDERR "            can appear more than once on command line\n";
+ #		printf STDERR "       -f - skip HCA firmware upgrade during install\n";
+-		#printf STDERR "       -l - skip creating/removing symlinks to /usr/local from /opt/opa\n";
++		#printf STDERR "       -l - skip creating/removing symlinks to /usr/local from /usr/lib/opa-ff\n";
+ 		printf STDERR "       --user_configure_options 'options' - specify additional OFA build\n";
+ 		printf STDERR "             options for user space srpms.  Causes rebuild of all user srpms\n";
+ 		printf STDERR "       --kernel_configure_options 'options' - specify additional OFA build\n";
+diff --git a/CommonInstall/main_openibff.pl b/CommonInstall/main_openibff.pl
+index 8176083..7562df4 100755
+--- a/CommonInstall/main_openibff.pl
++++ b/CommonInstall/main_openibff.pl
+@@ -250,7 +250,7 @@ sub Usage
+ 		printf STDERR "       -i comp - install the given component with default options\n";
+ 		printf STDERR "            can appear more than once on command line\n";
+ #		printf STDERR "       -f - skip HCA firmware upgrade during install\n";
+-		#printf STDERR "       -l - skip creating/removing symlinks to /usr/local from /opt/opa\n";
++		#printf STDERR "       -l - skip creating/removing symlinks to /usr/local from /usr/lib/opa-ff\n";
+ 		printf STDERR "       --without-depcheck - disable check of OS dependencies\n";
+ 		printf STDERR "       --force - force install even if distos don't match\n";
+ 		printf STDERR "                 Use of this option can result in undefined behaviors\n";
+diff --git a/CommonInstall/mpi_apps.pl b/CommonInstall/mpi_apps.pl
+index ded6b88..3a1f022 100755
+--- a/CommonInstall/mpi_apps.pl
++++ b/CommonInstall/mpi_apps.pl
+@@ -67,23 +67,23 @@ sub install_shmem_apps($)
+ 	uninstall_shmem_apps;
+ 
+ 	# Copy all shmem sample applications
+-	check_dir("/opt/opa/src");
+-	check_dir("/opt/opa/src/shmem_apps");
++	check_dir("/usr/lib/opa-ff/src");
++	check_dir("/usr/lib/opa-ff/src/shmem_apps");
+ 	if ( -e "$srcdir/shmem/shmem_apps/shmem_apps.tgz" )
+ 	{
+-		system("tar xfvz $srcdir/shmem/shmem_apps/shmem_apps.tgz --directory $ROOT/opt/opa/src/shmem_apps > $ROOT/opt/opa/src/shmem_apps/.files");
++		system("tar xfvz $srcdir/shmem/shmem_apps/shmem_apps.tgz --directory $ROOT/usr/lib/opa-ff/src/shmem_apps > $ROOT/usr/lib/opa-ff/src/shmem_apps/.files");
+ 	}
+ 	# allow all users to read the files so they can copy and use
+-	system("chmod -R ugo+r $ROOT/opt/opa/src/shmem_apps");
+-	system("find $ROOT/opt/opa/src/shmem_apps -type d|xargs chmod ugo+x");
++	system("chmod -R ugo+r $ROOT/usr/lib/opa-ff/src/shmem_apps");
++	system("find $ROOT/usr/lib/opa-ff/src/shmem_apps -type d|xargs chmod ugo+x");
+ }
+ 
+ sub uninstall_shmem_apps()
+ {
+ 	# remove shmem_apps we installed or user compiled, however do not remove
+ 	# any logs or other files the user may have created
+-	remove_shmem_apps "/opt/opa/src/shmem_apps";
+-	system "rmdir $ROOT/opt/opa/src 2>/dev/null";	# remove only if empty
+-	system "rmdir $ROOT/opt/opa 2>/dev/null";	# remove only if empty
++	remove_shmem_apps "/usr/lib/opa-ff/src/shmem_apps";
++	system "rmdir $ROOT/usr/lib/opa-ff/src 2>/dev/null";	# remove only if empty
++	system "rmdir $ROOT/usr/lib/opa-ff 2>/dev/null";	# remove only if empty
+ }
+ 
+diff --git a/CommonInstall/test_fm_install.sh b/CommonInstall/test_fm_install.sh
+index b9d992a..33b8051 100644
+--- a/CommonInstall/test_fm_install.sh
++++ b/CommonInstall/test_fm_install.sh
+@@ -48,7 +48,7 @@ check_default()
+ {
+ 	diff /etc/sysconfig/opafm.xml-sample /etc/sysconfig/opafm.xml
+ 	[ $? != 0 ] && echo "FAIL: installed does not match sample"
+-	diff /etc/sysconfig/opafm.xml-sample /opt/opafm/etc/opafm.xml
++	diff /etc/sysconfig/opafm.xml-sample /usr/lib/opa-fm/etc/opafm.xml
+ 	[ $? != 0 ] && echo "FAIL: sample does not match default"
+ }
+ 
+@@ -56,7 +56,7 @@ check_nodefault()
+ {
+ 	diff /etc/sysconfig/opafm.xml-sample /etc/sysconfig/opafm.xml
+ 	[ $? != 0 ] || echo "FAIL: installed should not match sample"
+-	diff /etc/sysconfig/opafm.xml-sample /opt/opafm/etc/opafm.xml
++	diff /etc/sysconfig/opafm.xml-sample /usr/lib/opa-fm/etc/opafm.xml
+ 	[ $? != 0 ] && echo "FAIL: sample does not match default"
+ }
+ 
+@@ -89,7 +89,7 @@ check_norpmnew
+ echo "========================================================================="
+ echo "Install with iview_fm.config matching 4.4 version"
+ rm_config
+-cp /opt/opafm/etc/iview_fm.config.4x /etc/sysconfig/iview_fm.config
++cp /usr/lib/opa-fm/etc/iview_fm.config.4x /etc/sysconfig/iview_fm.config
+ ./INSTALL -a
+ check_default
+ check_iview
+@@ -98,7 +98,7 @@ check_norpmnew
+ echo "========================================================================="
+ echo "Install with iview_fm.config matching 4.3 version"
+ rm_config
+-cp /opt/opafm/etc/iview_fm.config.4.3 /etc/sysconfig/iview_fm.config
++cp /usr/lib/opa-fm/etc/iview_fm.config.4.3 /etc/sysconfig/iview_fm.config
+ ./INSTALL -a
+ check_default
+ check_iview
+@@ -107,7 +107,7 @@ check_norpmnew
+ echo "========================================================================="
+ echo "Install with iview_fm.config matching 4.3.1 version"
+ rm_config
+-cp /opt/opafm/etc/iview_fm.config.4.3.1 /etc/sysconfig/iview_fm.config
++cp /usr/lib/opa-fm/etc/iview_fm.config.4.3.1 /etc/sysconfig/iview_fm.config
+ ./INSTALL -a
+ check_default
+ check_iview
+@@ -116,7 +116,7 @@ check_norpmnew
+ echo "========================================================================="
+ echo "Install with iview_fm.config matching 4.2.1.2.1 version"
+ rm_config
+-cp /opt/opafm/etc/iview_fm.config.4.2.1.2.1 /etc/sysconfig/iview_fm.config
++cp /usr/lib/opa-fm/etc/iview_fm.config.4.2.1.2.1 /etc/sysconfig/iview_fm.config
+ ./INSTALL -a
+ check_default
+ check_iview
+@@ -125,7 +125,7 @@ check_norpmnew
+ echo "========================================================================="
+ echo "Install with opafm.xml matching 4.4 version"
+ rm_config
+-cp /opt/opafm/etc/opafm.xml /etc/sysconfig/opafm.xml
++cp /usr/lib/opa-fm/etc/opafm.xml /etc/sysconfig/opafm.xml
+ ./INSTALL -a
+ check_default
+ check_noiview
+@@ -134,7 +134,7 @@ check_norpmnew
+ echo "========================================================================="
+ echo "Install with opafm.xml matching sample but not 4.4 version (eg. upgrade)"
+ rm_config
+-cp /opt/opafm/etc/opafm.xml /etc/sysconfig/opafm.xml
++cp /usr/lib/opa-fm/etc/opafm.xml /etc/sysconfig/opafm.xml
+ echo "<!-- extra line -->" >> /etc/sysconfig/opafm.xml
+ cp /etc/sysconfig/opafm.xml /etc/sysconfig/opafm.xml-sample
+ ./INSTALL -a
+@@ -145,7 +145,7 @@ check_norpmnew
+ echo "========================================================================="
+ echo "Install with modified opafm.xml"
+ rm_config
+-cp /opt/opafm/etc/opafm.xml /etc/sysconfig/opafm.xml
++cp /usr/lib/opa-fm/etc/opafm.xml /etc/sysconfig/opafm.xml
+ echo "<!-- extra line -->" >> /etc/sysconfig/opafm.xml
+ ./INSTALL -a
+ check_nodefault
+@@ -155,7 +155,7 @@ check_norpmnew
+ echo "========================================================================="
+ echo "Install with modified iview_fm.config"
+ rm_config
+-cp /opt/opafm/etc/iview_fm.config.4x /etc/sysconfig/iview_fm.config
++cp /usr/lib/opa-fm/etc/iview_fm.config.4x /etc/sysconfig/iview_fm.config
+ echo "#extra line" >> /etc/sysconfig/iview_fm.config
+ ./INSTALL -a
+ check_nodefault
+diff --git a/CommonInstall/util_basicfile.pl b/CommonInstall/util_basicfile.pl
+index f6e9afb..35b9017 100755
+--- a/CommonInstall/util_basicfile.pl
++++ b/CommonInstall/util_basicfile.pl
+@@ -326,7 +326,7 @@ sub copy_shlib($$$)
+ 
+ sub symlink_usrlocal_shlib($$$)
+ {
+-	# a /opt/opa path w/o suffix (eg. a previous dest for copy_shlib)
++	# a /usr/lib/opa-ff path w/o suffix (eg. a previous dest for copy_shlib)
+ 	my($src) = shift();
+ 	my($libbase) = shift();
+ 	my($version) = shift();
+diff --git a/CommonInstall/util_ifcfg.pl b/CommonInstall/util_ifcfg.pl
+index 6a64b64..f322508 100755
+--- a/CommonInstall/util_ifcfg.pl
++++ b/CommonInstall/util_ifcfg.pl
+@@ -169,7 +169,7 @@ sub Get_IP_Addr_Netmask($$)
+ 	if ( "$ipaddr" eq "dhcp" ) {
+ 		return "";
+ 	}
+-	$default_netmask = `/opt/opa/tools/opaipcalc --netmask $ipaddr`;
++	$default_netmask = `/usr/lib/opa-ff/tools/opaipcalc --netmask $ipaddr`;
+ 	$default_netmask =~ s/NETMASK=//;
+ 	$default_netmask =~ s/\n//;
+ 	$_ = $ipaddr;		# setup for translate & other cmds
+@@ -318,7 +318,7 @@ sub Build_ifcfg($$$)
+ 			system $SysCmd;
+ 
+ 			# append the network
+-			$temp = `/opt/opa/tools/opaipcalc --network $ipaddr $netmask`;
++			$temp = `/usr/lib/opa-ff/tools/opaipcalc --network $ipaddr $netmask`;
+ 			chomp($temp);
+ 			$temp =~ s/NETWORK=//;
+ 			$SysCmd = "echo \"NETWORK=\'$temp\'\" >> $target";
+@@ -326,7 +326,7 @@ sub Build_ifcfg($$$)
+ 			system $SysCmd;
+ 
+ 			# append the broadcast
+-			$temp = `/opt/opa/tools/opaipcalc --broadcast $ipaddr $netmask`;
++			$temp = `/usr/lib/opa-ff/tools/opaipcalc --broadcast $ipaddr $netmask`;
+ 			chomp($temp);
+ 			$temp =~ s/BROADCAST=//;
+ 			$SysCmd = "echo \"BROADCAST=\'$temp\'\" >> $target";
+@@ -383,7 +383,7 @@ sub Build_ifcfg($$$)
+ 			system $SysCmd;
+ 
+ 			# append the network,broadcast
+-			$SysCmd = "/opt/opa/tools/opaipcalc --network --broadcast $ipaddr $netmask >> $target";
++			$SysCmd = "/usr/lib/opa-ff/tools/opaipcalc --network --broadcast $ipaddr $netmask >> $target";
+ 			DebugPrint("cmd '$SysCmd'\n");
+ 			system $SysCmd;
+ 
+diff --git a/CommonInstall/util_init.pl b/CommonInstall/util_init.pl
+index 5f6bb72..eb3c705 100755
+--- a/CommonInstall/util_init.pl
++++ b/CommonInstall/util_init.pl
+@@ -175,7 +175,7 @@ sub dot_version($)
+ my $LIB_DIR = "/lib";
+ my $UVP_LIB_DIR = "/lib";
+ my $USRLOCALLIB_DIR = "/usr/local/lib";
+-my $OPTIBALIB_DIR = "/opt/opa/lib";
++my $OPTIBALIB_DIR = "/usr/lib/opa-ff/lib";
+ my $USRLIB_DIR = "/usr/lib";
+ # if different from $LIB_DIR, where to remove libraries from past release
+ my $OLD_LIB_DIR = "/lib";
+@@ -191,7 +191,7 @@ sub set_libdir()
+ 		$UVP_CONF_FILE_SOURCE = "uvp.conf.64";
+ 		$DAT_CONF_FILE_SOURCE = "dat.conf.64";
+ 		$USRLOCALLIB_DIR = "/usr/local/lib64";
+-		$OPTIBALIB_DIR = "/opt/opa/lib64";
++		$OPTIBALIB_DIR = "/usr/lib/opa-ff/lib64";
+ 		$USRLIB_DIR = "/usr/lib64";
+ 	}
+ }
+diff --git a/Esm/ib/include/hsm_config_srvr_data.h b/Esm/ib/include/hsm_config_srvr_data.h
+index c4b56fb..d702ef3 100755
+--- a/Esm/ib/include/hsm_config_srvr_data.h
++++ b/Esm/ib/include/hsm_config_srvr_data.h
+@@ -32,7 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+ #include "hsm_config_srvr_api.h"
+ 
+-#define HSM_FM_SCK_PREFIX	"/var/opt/opafm/"
++#define HSM_FM_SCK_PREFIX	"/var/usr/lib/opa-fm/"
+ #define HSM_FM_SCK_SM		"sm_"
+ #define HSM_FM_SCK_PM		"pm_"
+ #define HSM_FM_SCK_FE		"fe_"
+diff --git a/Esm/ib/man/opafmcmd.manPage b/Esm/ib/man/opafmcmd.manPage
+index c306266..600b682 100644
+--- a/Esm/ib/man/opafmcmd.manPage
++++ b/Esm/ib/man/opafmcmd.manPage
+@@ -99,7 +99,7 @@ Sets the SM log mode flags. 0/1 1=downgrade non-actionable, 0/2 2=logfile only.
+ 
+ .sp
+ smLogMask 
+-Sets the SM log mask for a specific subsystem to the value given. For a list of subsystems and mask bit meanings, see the files /etc/sysconfig/opafm.xml or /opt/opafm/etc/opafm.xml.
++Sets the SM log mask for a specific subsystem to the value given. For a list of subsystems and mask bit meanings, see the files /etc/sysconfig/opafm.xml or /usr/lib/opa-fm/etc/opafm.xml.
+ 
+ .RE
+ 
+@@ -182,7 +182,7 @@ Sets the FE log mode flags. 0/1 1=downgrade non-actionable, 0/2 2=logfile only.
+ 
+ .sp
+ feLogMask 
+-Sets the FE log mask for a specific subsystem to the value given. For a list of subsystems and mask bit meanings, see the files /etc/sysconfig/opafm.xml or /opt/opafm/etc/opafm.xml 
++Sets the FE log mask for a specific subsystem to the value given. For a list of subsystems and mask bit meanings, see the files /etc/sysconfig/opafm.xml or /usr/lib/opa-fm/etc/opafm.xml 
+ 
+ .RE
+ 
+diff --git a/Esm/ib/man/opafmcmdall.manPage b/Esm/ib/man/opafmcmdall.manPage
+index 8034d43..0374289 100644
+--- a/Esm/ib/man/opafmcmdall.manPage
++++ b/Esm/ib/man/opafmcmdall.manPage
+@@ -101,7 +101,7 @@ Sets the SM log mode flags. 0/1 1=downgrade non-actionable, 0/2 2=logfile only.
+ 
+ .sp
+ smLogMask 
+-Sets the SM log mask for a specific subsystem to the value given. For a list of subsystems and mask bit meanings, see the files /etc/sysconfig/opafm.xml or /opt/opafm/etc/opafm.xml.
++Sets the SM log mask for a specific subsystem to the value given. For a list of subsystems and mask bit meanings, see the files /etc/sysconfig/opafm.xml or /usr/lib/opa-fm/etc/opafm.xml.
+ 
+ .RE
+ 
+@@ -184,7 +184,7 @@ Sets the FE log mode flags. 0/1 1=downgrade non-actionable, 0/2 2=logfile only.
+ 
+ .sp
+ feLogMask 
+-Sets the FE log mask for a specific subsystem to the value given. For a list of subsystems and mask bit meanings, see the files /etc/sysconfig/opafm.xml or /opt/opafm/etc/opafm.xml 
++Sets the FE log mask for a specific subsystem to the value given. For a list of subsystems and mask bit meanings, see the files /etc/sysconfig/opafm.xml or /usr/lib/opa-fm/etc/opafm.xml 
+ 
+ .RE
+ 
+diff --git a/Esm/ib/src/config/fm_xml.c b/Esm/ib/src/config/fm_xml.c
+index 26b4e4f..b4dc29a 100644
+--- a/Esm/ib/src/config/fm_xml.c
++++ b/Esm/ib/src/config/fm_xml.c
+@@ -1192,7 +1192,7 @@ void pmInitConfig(PMXmlConfig_t *pmp, uint32_t instance, uint32_t ccc_method)
+ 	if (pmp->shortTermHistory.enable) {
+ 		DEFAULT_AND_CKSUM_U32(pmp->shortTermHistory.imagesPerComposite, 3, CKSUM_OVERALL_DISRUPT_CONSIST);
+ 		DEFAULT_AND_CKSUM_U32(pmp->shortTermHistory.maxDiskSpace, 1024, CKSUM_OVERALL_DISRUPT_CONSIST);
+-		DEFAULT_AND_CKSUM_STR(pmp->shortTermHistory.StorageLocation, "/var/opt/opafm", CKSUM_OVERALL_DISRUPT);
++		DEFAULT_AND_CKSUM_STR(pmp->shortTermHistory.StorageLocation, "/var/usr/lib/opa-fm", CKSUM_OVERALL_DISRUPT);
+ 		DEFAULT_AND_CKSUM_U32(pmp->shortTermHistory.totalHistory, 24, CKSUM_OVERALL_DISRUPT_CONSIST);
+ 		DEFAULT_AND_CKSUM_U8(pmp->shortTermHistory.compressionDivisions, 1, CKSUM_OVERALL_DISRUPT_CONSIST);
+ 	}
+diff --git a/Esm/ib/src/ibaccess/cs_info_file.c b/Esm/ib/src/ibaccess/cs_info_file.c
+index d73967e..2d3f776 100755
+--- a/Esm/ib/src/ibaccess/cs_info_file.c
++++ b/Esm/ib/src/ibaccess/cs_info_file.c
+@@ -35,7 +35,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+ #define INFO_FILE "/etc/sysconfig/opa/opafm.info"
+ static uint8_t		buffer [256];			// cleaned up read_buffer
+-uint8_t		hfm_install_dir [256] = "/opt/opafm";	// base directory where everything is
++uint8_t		hfm_install_dir [256] = "/usr/lib/opa-fm";	// base directory where everything is
+ 
+ static Status_t	read_line		(FILE *fd_config);
+ 
+diff --git a/Esm/ib/src/linux/fm_cmd/fm_cmd.c b/Esm/ib/src/linux/fm_cmd/fm_cmd.c
+index 6721e3d..5b55d4a 100644
+--- a/Esm/ib/src/linux/fm_cmd/fm_cmd.c
++++ b/Esm/ib/src/linux/fm_cmd/fm_cmd.c
+@@ -105,7 +105,7 @@ static command_t commandList[] = {
+ 	{"smStateDump",sm_state_dump, FM_MGR_SM, "Dump Internal SM state into directory specified"},
+ 	{"smLogLevel", mgr_log_level, FM_MGR_SM, "Set the SM logging level (0=NONE+, 1=WARN+, 2=NOTICE+,\n                           3=INFO+, 4=VERBOSE+, 5=DEBUG2+, 6=DEBUG4+, 7=TRACE+)"},
+ 	{"smLogMode", mgr_log_mode, FM_MGR_SM, "Set the SM log mode flags (0/1 1=downgrade\n                           non-actionable, 0/2 2=logfile only)"},
+-	{"smLogMask", mgr_log_mask, FM_MGR_SM, "Set the SM log mask for a specific subsystem to the\n                           value given see /etc/sysconfig/opafm.xml\n                           or /opt/opafm/etc/opafm.xml\n                           for a list of subsystems and mask bit meanings"},
++	{"smLogMask", mgr_log_mask, FM_MGR_SM, "Set the SM log mask for a specific subsystem to the\n                           value given see /etc/sysconfig/opafm.xml\n                           or /usr/lib/opa-fm/etc/opafm.xml\n                           for a list of subsystems and mask bit meanings"},
+ 	{"smPerfDebug", sm_perf_debug_toggle, FM_MGR_SM, "Toggle performance debug output for SM"},
+ 	{"saPerfDebug", sa_perf_debug_toggle, FM_MGR_SM, "Toggle performance debug output for SA"},
+ 	{"saRmppDebug", mgr_rmpp_debug_toggle, FM_MGR_SM, "Toggle Rmpp debug output for SA"},
+@@ -116,7 +116,7 @@ static command_t commandList[] = {
+ 	{"pmRmppDebug", mgr_rmpp_debug_toggle, FM_MGR_PM, "Toggle Rmpp debug output for PM"},
+ 	{"feLogLevel", mgr_log_level, FM_MGR_FE, "Set the FE logging level (0=NONE+, 1=WARN+, 2=NOTICE+,\n                           3=INFO+, 4=VERBOSE+, 5=DEBUG2+, 6=DEBUG4+, 7=TRACE+)"},
+ 	{"feLogMode", mgr_log_mode, FM_MGR_FE, "Set the FE log mode flags (0/1 1=downgrade\n                           non-actionable, 0/2 2=logfile only)"},
+-	{"feLogMask", mgr_log_mask, FM_MGR_FE, "Set the FE log mask for a specific subsystem to the\n                           value given see /etc/sysconfig/opafm.xml\n                           or /opt/opafm/etc/opafm.xml\n                           for a list of subsystems and mask bit meanings"},
++	{"feLogMask", mgr_log_mask, FM_MGR_FE, "Set the FE log mask for a specific subsystem to the\n                           value given see /etc/sysconfig/opafm.xml\n                           or /usr/lib/opa-fm/etc/opafm.xml\n                           for a list of subsystems and mask bit meanings"},
+ 	{"feDebug", mgr_debug_toggle, FM_MGR_FE, "Toggle debug output for FE"},
+ 	{"feRmppDebug", mgr_rmpp_debug_toggle, FM_MGR_FE, "Toggle Rmpp debug output for FE"},
+ 	{"smLooptestStart", sm_looptest_start, FM_MGR_SM, "START loop test in normal mode - specify the number of\n                           256 byte packets (default=0)"},
+diff --git a/Esm/ib/src/linux/fm_cmd/hsm_config_client_data.h b/Esm/ib/src/linux/fm_cmd/hsm_config_client_data.h
+index 9ef3a7c..57a5771 100755
+--- a/Esm/ib/src/linux/fm_cmd/hsm_config_client_data.h
++++ b/Esm/ib/src/linux/fm_cmd/hsm_config_client_data.h
+@@ -32,7 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+ #include "hsm_config_client_api.h"
+ 
+-#define HSM_FM_SCK_PREFIX	"/var/opt/opafm/"
++#define HSM_FM_SCK_PREFIX	"/var/usr/lib/opa-fm/"
+ #define HSM_FM_SCK_SM		"sm_"
+ #define HSM_FM_SCK_PM		"pm_"
+ #define HSM_FM_SCK_FE		"fe_"
+diff --git a/Esm/ib/src/linux/fm_cmd/test_fm_cmd.sh b/Esm/ib/src/linux/fm_cmd/test_fm_cmd.sh
+index 1c928f4..86d32dc 100755
+--- a/Esm/ib/src/linux/fm_cmd/test_fm_cmd.sh
++++ b/Esm/ib/src/linux/fm_cmd/test_fm_cmd.sh
+@@ -28,7 +28,7 @@
+ # 
+ # END_ICS_COPYRIGHT8
+ 
+-FM_CMD="/opt/opafm/bin/fm_cmd"
++FM_CMD="/usr/lib/opa-fm/bin/fm_cmd"
+ 
+ cmd=(
+ 	"smPerfDebug 100"
+diff --git a/Esm/ib/src/linux/rem_conf/hsm_config_data.h b/Esm/ib/src/linux/rem_conf/hsm_config_data.h
+index 39baa09..e434b30 100755
+--- a/Esm/ib/src/linux/rem_conf/hsm_config_data.h
++++ b/Esm/ib/src/linux/rem_conf/hsm_config_data.h
+@@ -33,7 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ #include "hsm_config_api.h"
+ #include "snmp_com_api.h"
+ 
+-#define HSM_FM_SCK_PREFIX	"/var/opt/opafm/"
++#define HSM_FM_SCK_PREFIX	"/var/usr/lib/opa-fm/"
+ #define HSM_FM_SCK_SM		"sm_"
+ #define HSM_FM_SCK_PM		"pm_"
+ #define HSM_FM_SCK_FE		"fe_"
+diff --git a/Esm/ib/src/linux/startup/fm_cmdall.sh b/Esm/ib/src/linux/startup/fm_cmdall.sh
+index 0582df4..49f06af 100755
+--- a/Esm/ib/src/linux/startup/fm_cmdall.sh
++++ b/Esm/ib/src/linux/startup/fm_cmdall.sh
+@@ -32,7 +32,7 @@
+ 
+ CONFIG_DIR=/etc/sysconfig
+ CONFIG_FILE=$CONFIG_DIR/opafm.xml
+-IFS_FM_BASE=/opt/opafm # default
++IFS_FM_BASE=/usr/lib/opa-fm # default
+ if [ -s $CONFIG_DIR/opa/opafm.info ]
+ then
+ 	# get IFS_FM_BASE
+diff --git a/Esm/ib/src/linux/startup/fm_config/config_diff.sh b/Esm/ib/src/linux/startup/fm_config/config_diff.sh
+index 2e97e80..271b6b9 100755
+--- a/Esm/ib/src/linux/startup/fm_config/config_diff.sh
++++ b/Esm/ib/src/linux/startup/fm_config/config_diff.sh
+@@ -69,9 +69,9 @@ Usage_full()
+ 	echo "to two FM instances described by file1 and file2" >&2
+ 	echo " " >&2
+ 	echo "Examples:" >&2
+-	echo "  $(basename $PROG_NAME) /etc/sysconfig/opafm.xml /opt/opafm/etc/opafm.xml" >&2
+-	echo "  $(basename $PROG_NAME) -f /etc/sysconfig/opafm.xml /opt/opafm/etc/opafm.xml" >&2
+-	echo "  $(basename $PROG_NAME) -d -uw /etc/sysconfig/opafm.xml /opt/opafm/etc/opafm.xml" >&2
++	echo "  $(basename $PROG_NAME) /etc/sysconfig/opafm.xml /usr/lib/opa-fm/etc/opafm.xml" >&2
++	echo "  $(basename $PROG_NAME) -f /etc/sysconfig/opafm.xml /usr/lib/opa-fm/etc/opafm.xml" >&2
++	echo "  $(basename $PROG_NAME) -d -uw /etc/sysconfig/opafm.xml /usr/lib/opa-fm/etc/opafm.xml" >&2
+ 	exit 0
+ 
+ }
+diff --git a/Esm/ib/src/linux/startup/opafe@.service b/Esm/ib/src/linux/startup/opafe@.service
+index d5c89d4..b265ef0 100755
+--- a/Esm/ib/src/linux/startup/opafe@.service
++++ b/Esm/ib/src/linux/startup/opafe@.service
+@@ -36,7 +36,7 @@ After=network.target
+ [Service]
+ User=root
+ Type=forking
+-ExecStart=/opt/opafm/runtime/fe -D -e fe_%I
++ExecStart=/usr/lib/opa-fm/runtime/fe -D -e fe_%I
+ RestartSec=2
+ 
+ [Install]
+diff --git a/Esm/ib/src/linux/startup/opafm.info b/Esm/ib/src/linux/startup/opafm.info
+index 4bac6b3..80f7496 100755
+--- a/Esm/ib/src/linux/startup/opafm.info
++++ b/Esm/ib/src/linux/startup/opafm.info
+@@ -29,4 +29,4 @@
+ 
+ #[ICS VERSION STRING: unknown]
+ # Base location of IFS Fabric Manager.
+-IFS_FM_BASE=/opt/opafm
++IFS_FM_BASE=/usr/lib/opa-fm
+diff --git a/Esm/ib/src/linux/startup/opafm.service b/Esm/ib/src/linux/startup/opafm.service
+index 4c77185..4e908be 100755
+--- a/Esm/ib/src/linux/startup/opafm.service
++++ b/Esm/ib/src/linux/startup/opafm.service
+@@ -36,8 +36,8 @@ After=rdma.service network.target
+ [Service]
+ User=root
+ Type=forking
+-ExecStart=/opt/opafm/bin/opafmd -D
+-ExecStop=/opt/opafm/bin/opafmd halt
++ExecStart=/usr/lib/opa-fm/bin/opafmd -D
++ExecStop=/usr/lib/opa-fm/bin/opafmd halt
+ ExecReload=/bin/kill -HUP $MAINPID
+ TimeoutStopSec=2
+ RestartSec=2
+diff --git a/Esm/ib/src/linux/startup/opafm.sh b/Esm/ib/src/linux/startup/opafm.sh
+index 0add0fe..64d0202 100644
+--- a/Esm/ib/src/linux/startup/opafm.sh
++++ b/Esm/ib/src/linux/startup/opafm.sh
+@@ -226,7 +226,7 @@ get_config()
+ 		# get IFS_FM_BASE
+ 		. $CONFIG_DIR/opa/opafm.info
+ 	else
+-		IFS_FM_BASE=/opt/opafm
++		IFS_FM_BASE=/usr/lib/opa-fm
+ 		if [ "$quiet" != y ]
+ 		then
+ 			echo "Error: $CONFIG_DIR/opa/opafm.info not found" >&2
+diff --git a/Esm/ib/src/linux/startup/opafm_src.xml b/Esm/ib/src/linux/startup/opafm_src.xml
+index 7c0141d..60d6c89 100644
+--- a/Esm/ib/src/linux/startup/opafm_src.xml
++++ b/Esm/ib/src/linux/startup/opafm_src.xml
+@@ -1960,7 +1960,7 @@
+     <!--    must not exceed 32 -->
+     <ShortTermHistory>
+         <Enable>1</Enable>
+-        <!-- <StorageLocation>/var/opt/opafm/pahistory</StorageLocation> --> <!-- must be absolute path -->
++        <!-- <StorageLocation>/var/usr/lib/opa-fm/pahistory</StorageLocation> --> <!-- must be absolute path -->
+         <TotalHistory>24</TotalHistory> <!-- in hours -->
+         <ImagesPerComposite>3</ImagesPerComposite>
+         <MaxDiskSpace>1024</MaxDiskSpace> <!-- in MiB -->
+@@ -2074,7 +2074,7 @@
+     <!-- ESM does not support Start via XML configuration. Use CLI commands -->
+     <!-- <Start>1</Start> -->                                                                                          <!--#PM_0_start:dec==1-->
+     <ShortTermHistory>
+-        <StorageLocation>/var/opt/opafm/pm0_pahistory</StorageLocation> <!-- must be absolute path -->
++        <StorageLocation>/var/usr/lib/opa-fm/pm0_pahistory</StorageLocation> <!-- must be absolute path -->
+     </ShortTermHistory>
+   </Pm>
+ </Fm>
+@@ -2208,7 +2208,7 @@
+     <!-- <TotalImages>10</TotalImages> --> <!-- total images for history and freeze -->                                <!--#PM_1_TotalImages:dec-->
+     <!-- <FreezeFrameImages>5</FreezeFrameImages> --> <!-- max unique frozen images -->                                <!--#PM_1_FreezeFrameImages:dec-->
+     <ShortTermHistory>
+-        <StorageLocation>/var/opt/opafm/pm1_pahistory</StorageLocation> <!-- must be absolute path -->
++        <StorageLocation>/var/usr/lib/opa-fm/pm1_pahistory</StorageLocation> <!-- must be absolute path -->
+     </ShortTermHistory>
+     <!-- <Debug>0</Debug> -->                                                                                          <!--#PM_1_debug:dec-->
+     <!-- <LogLevel>2</LogLevel> -->                                                                                    <!--#PM_1_log_level:dec-->
+@@ -2361,7 +2361,7 @@
+     <!-- <TotalImages>10</TotalImages> --> <!-- total images for history and freeze -->                                <!--#PM_2_TotalImages:dec-->
+     <!-- <FreezeFrameImages>5</FreezeFrameImages> --> <!-- max unique frozen images -->                                <!--#PM_2_FreezeFrameImages:dec-->
+     <ShortTermHistory>
+-        <StorageLocation>/var/opt/opafm/pm2_pahistory</StorageLocation> <!-- must be absolute path -->
++        <StorageLocation>/var/usr/lib/opa-fm/pm2_pahistory</StorageLocation> <!-- must be absolute path -->
+     </ShortTermHistory>
+     <!-- <Debug>0</Debug> -->                                                                                          <!--#PM_2_debug:dec-->
+     <!-- <LogLevel>2</LogLevel> -->                                                                                    <!--#PM_2_log_level:dec-->
+@@ -2514,7 +2514,7 @@
+     <!-- <TotalImages>10</TotalImages> --> <!-- total images for history and freeze -->                                <!--#PM_3_TotalImages:dec-->
+     <!-- <FreezeFrameImages>5</FreezeFrameImages> --> <!-- max unique frozen images -->                                <!--#PM_3_FreezeFrameImages:dec-->
+     <ShortTermHistory>
+-        <StorageLocation>/var/opt/opafm/pm3_pahistory</StorageLocation> <!-- must be absolute path -->
++        <StorageLocation>/var/usr/lib/opa-fm/pm3_pahistory</StorageLocation> <!-- must be absolute path -->
+     </ShortTermHistory>
+     <!-- <Debug>0</Debug> -->                                                                                          <!--#PM_3_debug:dec-->
+     <!-- <LogLevel>2</LogLevel> -->                                                                                    <!--#PM_3_log_level:dec-->
+diff --git a/Esm/ib/src/linux/startup/opafmctrl.sh b/Esm/ib/src/linux/startup/opafmctrl.sh
+index 2ed1012..1576140 100755
+--- a/Esm/ib/src/linux/startup/opafmctrl.sh
++++ b/Esm/ib/src/linux/startup/opafmctrl.sh
+@@ -204,7 +204,7 @@ get_config()
+ 		# get IFS_FM_BASE
+ 		. $CONFIG_DIR/opa/opafm.info
+ 	else
+-		IFS_FM_BASE=/opt/opafm
++		IFS_FM_BASE=/usr/lib/opa-fm
+ 		if [ "$quiet" != y ]
+ 		then
+ 			echo "Error: $CONFIG_DIR/opa/opafm.info not found" >&2
+diff --git a/Esm/ib/src/linux/startup/opafmd.c b/Esm/ib/src/linux/startup/opafmd.c
+index 190de4a..eebbe3e 100644
+--- a/Esm/ib/src/linux/startup/opafmd.c
++++ b/Esm/ib/src/linux/startup/opafmd.c
+@@ -17,7 +17,7 @@
+ #define FM_MAX_INSTANCES 4
+ 
+ #define FM_XML_CONFIG "/etc/sysconfig/opafm.xml"
+-#define OPAXMLEXTRACT "/opt/opafm/etc/opaxmlextract"
++#define OPAXMLEXTRACT "/usr/lib/opa-fm/etc/opaxmlextract"
+ #define OPAXMLEXTRACT_RESTART_PARAMS "-H -e Common.Shared.StartupRetries -e Common.Shared.StartupStableWait -e Common.Sm.StartupRetries -e Common.Sm.StartupStableWait -e Common.Fe.StartupRetries -e Common.Fe.StartupStableWait -e Fm.Shared.StartupRetries -e Fm.Shared.StartupStableWait -e Fm.Sm.StartupRetries -e Fm.Sm.StartupStableWait -e Fm.Fe.StartupRetries -e Fm.Fe.StartupStableWait -X"
+ #define OPAXMLEXTRACT_INSTANCE_PARAMS "-H -e Fm.Shared.Start -e Fm.Sm.Start -e Fm.Fe.Start -X"
+ #define OPAXMLEXTRACT_COMMON_PARAMS "-H -e Common.Sm.Start -e Common.Fe.Start -X"
+@@ -439,7 +439,7 @@ int spawn(const unsigned int instance, const int component, int *pids){
+ 	}
+ 	switch(pid = fork()){
+ 	case 0:
+-		sprintf(prog, "/opt/opafm/runtime/%s", componentToExecName(component));
++		sprintf(prog, "/usr/lib/opa-fm/runtime/%s", componentToExecName(component));
+ 		sprintf(name, "%s_%d", componentToExecName(component), instance);
+ 		execle(prog, prog, "-e", name, NULL, nullEnv);
+ 		return 0;
+@@ -848,7 +848,7 @@ int main(int argc, char* argv[]) {
+ 			return 0;
+ 		}
+ 	} else {
+-		char prog[] = "/opt/opafm/bin/opafmctrl";
++		char prog[] = "/usr/lib/opa-fm/bin/opafmctrl";
+ 		if(inst[0] != 0){
+ 			if(comp != NULL)
+ 				execle(prog, prog, cmd, "-i", inst, comp, NULL, nullEnv);	// Call opafmctl with instance number and component,
+diff --git a/Esm/ib/src/linux/startup/opasm@.service b/Esm/ib/src/linux/startup/opasm@.service
+index b1c4340..14309b9 100755
+--- a/Esm/ib/src/linux/startup/opasm@.service
++++ b/Esm/ib/src/linux/startup/opasm@.service
+@@ -36,7 +36,7 @@ After=network.target
+ [Service]
+ User=root
+ Type=forking
+-ExecStart=/opt/opafm/runtime/sm -D -e sm_%I
++ExecStart=/usr/lib/opa-fm/runtime/sm -D -e sm_%I
+ ExecReload=/bin/kill -HUP $MAINPID
+ RestartSec=2
+ 
+diff --git a/Esm/ib/src/linux/startup/sm_capture.sh b/Esm/ib/src/linux/startup/sm_capture.sh
+index e5eca27..2a2890c 100755
+--- a/Esm/ib/src/linux/startup/sm_capture.sh
++++ b/Esm/ib/src/linux/startup/sm_capture.sh
+@@ -32,9 +32,9 @@
+ 
+ CONFIG_DIR=/etc/sysconfig
+ CONFIG_FILE=$CONFIG_DIR/opafm.xml
+-OPA_FM_BASE=/opt/opafm # default
++OPA_FM_BASE=/usr/lib/opa-fm # default
+ GDB=/usr/bin/gdb
+-SM_EXEC=/opt/opafm/runtime/sm 
++SM_EXEC=/usr/lib/opa-fm/runtime/sm 
+ 
+ if [ -s $CONFIG_DIR/opa/opafm.info ]
+ then
+diff --git a/Esm/opafm.spec b/Esm/opafm.spec
+index 6c2f3fe..5e22df7 100644
+--- a/Esm/opafm.spec
++++ b/Esm/opafm.spec
+@@ -82,8 +82,8 @@ fi
+ %define fm_mans opafmcmd.8 opafmcmdall.8
+ 
+ install -D -m 644 stage.rpm/opafm.service $RPM_BUILD_ROOT/usr/lib/systemd/system/opafm.service
+-install -D -m 755 stage.rpm/opafmctrl $RPM_BUILD_ROOT/opt/opafm/bin/opafmctrl
+-install -D -m 755 stage.rpm/opafmd $RPM_BUILD_ROOT/opt/opafm/bin/opafmd
++install -D -m 755 stage.rpm/opafmctrl $RPM_BUILD_ROOT/usr/lib/opa-fm/bin/opafmctrl
++install -D -m 755 stage.rpm/opafmd $RPM_BUILD_ROOT/usr/lib/opa-fm/bin/opafmd
+ 
+ %if 0%{?rhel} && 0%{?rhel} < 7
+ install -D -m 755 stage.rpm/opafm $RPM_BUILD_ROOT%{_sysconfdir}/init.d/opafm
+@@ -92,39 +92,39 @@ install -D -m 755 stage.rpm/opafm $RPM_BUILD_ROOT%{_sysconfdir}/init.d/opafm
+ install -D -m 644 stage.rpm/opafm.xml $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/opafm.xml
+ install -D -m 755 stage.rpm/opafm.info $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/opa/opafm.info
+ 
+-install -D stage.rpm/fm_capture $RPM_BUILD_ROOT/opt/opafm/bin/fm_capture
+-install -D stage.rpm/fm_cmd $RPM_BUILD_ROOT/opt/opafm/bin/fm_cmd
+-install -D stage.rpm/fm_cmdall $RPM_BUILD_ROOT/opt/opafm/bin/fm_cmdall
+-install -D stage.rpm/smpoolsize $RPM_BUILD_ROOT/opt/opafm/bin/smpoolsize
+-
+-install -D stage.rpm/sm $RPM_BUILD_ROOT/opt/opafm/runtime/sm
+-install -D stage.rpm/fe $RPM_BUILD_ROOT/opt/opafm/runtime/fe
+-
+-install -D stage.rpm/config_check $RPM_BUILD_ROOT/opt/opafm/etc/config_check
+-install -D stage.rpm/config_convert $RPM_BUILD_ROOT/opt/opafm/etc/config_convert
+-install -D stage.rpm/config_diff $RPM_BUILD_ROOT/opt/opafm/etc/config_diff
+-install -D stage.rpm/config_generate $RPM_BUILD_ROOT/opt/opafm/etc/config_generate
+-install -D stage.rpm/opafm $RPM_BUILD_ROOT/opt/opafm/etc/opafm
+-install -D stage.rpm/opafm.arch $RPM_BUILD_ROOT/opt/opafm/etc/opafm.arch
+-install -D stage.rpm/opafm.info $RPM_BUILD_ROOT/opt/opafm/etc/opafm.info
++install -D stage.rpm/fm_capture $RPM_BUILD_ROOT/usr/lib/opa-fm/bin/fm_capture
++install -D stage.rpm/fm_cmd $RPM_BUILD_ROOT/usr/lib/opa-fm/bin/fm_cmd
++install -D stage.rpm/fm_cmdall $RPM_BUILD_ROOT/usr/lib/opa-fm/bin/fm_cmdall
++install -D stage.rpm/smpoolsize $RPM_BUILD_ROOT/usr/lib/opa-fm/bin/smpoolsize
++
++install -D stage.rpm/sm $RPM_BUILD_ROOT/usr/lib/opa-fm/runtime/sm
++install -D stage.rpm/fe $RPM_BUILD_ROOT/usr/lib/opa-fm/runtime/fe
++
++install -D stage.rpm/config_check $RPM_BUILD_ROOT/usr/lib/opa-fm/etc/config_check
++install -D stage.rpm/config_convert $RPM_BUILD_ROOT/usr/lib/opa-fm/etc/config_convert
++install -D stage.rpm/config_diff $RPM_BUILD_ROOT/usr/lib/opa-fm/etc/config_diff
++install -D stage.rpm/config_generate $RPM_BUILD_ROOT/usr/lib/opa-fm/etc/config_generate
++install -D stage.rpm/opafm $RPM_BUILD_ROOT/usr/lib/opa-fm/etc/opafm
++install -D stage.rpm/opafm.arch $RPM_BUILD_ROOT/usr/lib/opa-fm/etc/opafm.arch
++install -D stage.rpm/opafm.info $RPM_BUILD_ROOT/usr/lib/opa-fm/etc/opafm.info
+ if [ -d Esm ]; then
+ 	sub_dir=Esm/
+ else
+ 	sub_dir=
+ fi
+-install -D ${sub_dir}ib/src/linux/startup/opafm_src.xml $RPM_BUILD_ROOT/opt/opafm/etc/opafm_src.xml
++install -D ${sub_dir}ib/src/linux/startup/opafm_src.xml $RPM_BUILD_ROOT/usr/lib/opa-fm/etc/opafm_src.xml
+ 
+-install -D stage.rpm/opafm.xml $RPM_BUILD_ROOT/opt/opafm/etc/opafm.xml
+-install -D stage.rpm/opaxmlextract $RPM_BUILD_ROOT/opt/opafm/etc/opaxmlextract
+-install -D stage.rpm/opaxmlfilter $RPM_BUILD_ROOT/opt/opafm/etc/opaxmlfilter
++install -D stage.rpm/opafm.xml $RPM_BUILD_ROOT/usr/lib/opa-fm/etc/opafm.xml
++install -D stage.rpm/opaxmlextract $RPM_BUILD_ROOT/usr/lib/opa-fm/etc/opaxmlextract
++install -D stage.rpm/opaxmlfilter $RPM_BUILD_ROOT/usr/lib/opa-fm/etc/opaxmlfilter
+ 
+-install -D stage.rpm/opa_ca_openssl.cnf-sample $RPM_BUILD_ROOT/opt/opafm/samples/opa_ca_openssl.cnf-sample
+-install -D stage.rpm/opa_comp_openssl.cnf-sample $RPM_BUILD_ROOT/opt/opafm/samples/opa_comp_openssl.cnf-sample
++install -D stage.rpm/opa_ca_openssl.cnf-sample $RPM_BUILD_ROOT/usr/lib/opa-fm/samples/opa_ca_openssl.cnf-sample
++install -D stage.rpm/opa_comp_openssl.cnf-sample $RPM_BUILD_ROOT/usr/lib/opa-fm/samples/opa_comp_openssl.cnf-sample
+ 
+ mkdir -p $RPM_BUILD_ROOT%{_sbindir}
+ mkdir -p $RPM_BUILD_ROOT%{_mandir}/man8
+-ln -s /opt/opafm/bin/fm_cmd $RPM_BUILD_ROOT%{_sbindir}/opafmcmd
+-ln -s /opt/opafm/bin/fm_cmdall $RPM_BUILD_ROOT%{_sbindir}/opafmcmdall
++ln -s /usr/lib/opa-fm/bin/fm_cmd $RPM_BUILD_ROOT%{_sbindir}/opafmcmd
++ln -s /usr/lib/opa-fm/bin/fm_cmdall $RPM_BUILD_ROOT%{_sbindir}/opafmcmdall
+ 
+ cd stage.rpm
+ cp -t $RPM_BUILD_ROOT%{_mandir}/man8 %fm_mans
+@@ -160,10 +160,10 @@ fi
+ /usr/lib/systemd/system/opafm.service
+ %config(noreplace) %{_sysconfdir}/sysconfig/opafm.xml
+ %{_sysconfdir}/sysconfig/opa/opafm.info
+-/opt/opafm/bin/*
+-/opt/opafm/etc/*
+-/opt/opafm/runtime/*
+-/opt/opafm/samples/*
++/usr/lib/opa-fm/bin/*
++/usr/lib/opa-fm/etc/*
++/usr/lib/opa-fm/runtime/*
++/usr/lib/opa-fm/samples/*
+ %{_sbindir}/opafmcmd
+ %{_sbindir}/opafmcmdall
+ %{_mandir}/man8/*
