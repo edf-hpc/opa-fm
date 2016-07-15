@@ -1,5 +1,5 @@
-opa-fm (10.1.0.0.145-1) UNRELEASED; urgency=medium
+opa-fm (10.1.0.0.145-1) calibre9; urgency=medium
 
-  * Initial Release.
+  * Initial Release for Calibre9 (Debian Jessie).
 
  -- Ana Guerrero Lopez <ana-externe.guerrero@edf.fr>  Wed, 15 Jun 2016 13:26:18 +0200
